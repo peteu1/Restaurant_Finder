@@ -3,8 +3,81 @@
   <head>
     <meta charset="utf-8">
     <title>Restaurant Finder</title>
+	<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js'></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
   </head>
   <body>
     <p> This will be the application </p>
+	{% block content %}
+	<div class="container">
+	  <div class="row">
+	    <div class="btn-group">
+		  <button type="button" class="btn btn-primary">$</button>
+		  <button type="button" class="btn btn-primary">$$</button>
+		  <button type="button" class="btn btn-primary">$$$</button>
+		  <button type="button" class="btn btn-primary">$$$$</button>
+		</div>  <!-- end button group -->
+	  </div>  <!-- end top row -->
+	
+	  <div class="row">
+	  <div class="col">
+	    <!-- Create table -->
+	    <p>(This will be the list of restaurants)</p>
+	  </div>  <!-- end of list column -->
+	
+	
+	  <div class="col">
+		  <div id='map' style='width: 400px; height: 300px;'></div>
+		  <script>
+		  mapboxgl.accessToken = 'pk.eyJ1IjoianNvbWEiLCJhIjoibFJmYl9JWSJ9.AUm8d76cbOvVEn2mMeG_ZA';
+		  var map = new mapboxgl.Map({
+			container: 'map',
+			style: 'mapbox://styles/mapbox/streets-v9',
+			center: [{{ center_long }}, {{ center_lat }}],
+			zoom: {{ zoom }}
+		  });
+		  var features = []
+			  {% for result in results %}
+				features.push({
+					"type": "Feature",
+					"geometry": {
+						"type": "Point",
+						"coordinates": [
+							 {{ result.coordinates.longitude }},
+							 {{ result.coordinates.latitude }}
+						]
+					}
+				})
+			  {% endfor %}
+		  map.on('load', function() {
+			var geojsonData = {
+			  "type": "FeatureCollection",
+			  "features": features
+			};
+			map.addLayer({
+			  "id": "points",
+			  "type": "circle",
+			  "source": {
+				"type": "geojson",
+				"data": geojsonData
+			  }
+			})
+		  })
+		  </script>
+	    </div>  <!-- end of map column -->
+	  </div>  <!-- end of list/map row -->
+	</div>  <!-- end of container -->
+	  <div class="row">
+	    <p><strong>Results found:</strong> {{ results|length }}</p>
+	    <p><strong>center_long:</strong> {{ center_long }}</p>
+	    <p><strong>results[0].coordinates.longitude:</strong> {{ results[0].coordinates.longitude }}</p>
+	    <p><strong>First result:</strong> {{ results[0].name }}</p>
+	    <p><strong>Last result: </strong> {{ results[1].name }}</p>
+	    <p></p>
+	    <p></p>
+	  </div>
+	
+	</div>
+	{% endblock %}
   </body>
 </html>

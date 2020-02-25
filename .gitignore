@@ -4,3 +4,6 @@
 # Credentials
 creds.py
 
+# Cache
+__pycache__/*
+

@@ -1,3 +1,14 @@
-Create virtual environment
+Create virtual environment (flask, yelp, requests)
 Send it to the cloud
-Remove API key from github directory
+Add readme (mention creds.py)
+
+
+Get distance user is willing to travel
+Toggle buttons for meal (or enter time)
+Slider ($ -> $$$$) for restaurant price (two-ended slider)
+Toggle buttons for popularity (rating, num reviews)
+See if yelp API allows min and max distance
+ - else, manually filter results based on distance
+Get user location
+Add list of results on left side
+
