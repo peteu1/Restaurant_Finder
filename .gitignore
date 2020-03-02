@@ -7,3 +7,5 @@ creds.py
 # Cache
 __pycache__/*
 
+# Personal
+TODO.txt
