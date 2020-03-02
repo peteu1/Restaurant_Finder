@@ -11,4 +11,5 @@ See if yelp API allows min and max distance
  - else, manually filter results based on distance
 Get user location
 Add list of results on left side
-Remove Github page: https://peteu1.github.io/Restaurant_Finder/
+
+update gitignore
