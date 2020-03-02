@@ -6,6 +6,7 @@
 
 # Cache
 __pycache__/*
+.vscode/*
 
 # Personal/Notes
 TODO.txt
