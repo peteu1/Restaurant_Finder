@@ -2,11 +2,11 @@
 *.log
 
 # Credentials
-creds.py
+#creds.py
 
 # Cache
 __pycache__/*
 
 # Personal/Notes
-TODO.txt
-Commands.txt
+#TODO.txt
+#Commands.txt
