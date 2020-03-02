@@ -5,7 +5,6 @@ import creds
 
 
 app = Flask(__name__)
-restaurants = Restaurants()
 
 
 class Restaurants():
@@ -41,8 +40,9 @@ class Restaurants():
                 price_level = len(result.price)
                 if price_level > min_price and price_level < max_price:
                     self.filtered_results.append(result)
-    # End restaurants Class
+# End restaurants Class
 
+restaurants = Restaurants()
 
 
 @app.route('/getmsg/', methods=['GET'])
