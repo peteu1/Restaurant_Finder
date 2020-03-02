@@ -7,6 +7,6 @@ creds.py
 # Cache
 __pycache__/*
 
-# Personal
+# Personal/Notes
 TODO.txt
 Commands.txt
