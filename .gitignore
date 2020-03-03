@@ -4,6 +4,9 @@
 # Credentials
 #creds.py
 
+# Virtual environment
+venv/
+
 # Cache
 __pycache__/*
 .vscode/*
