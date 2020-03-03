@@ -1,0 +1,21 @@
+{% extends "app.html" %}
+{% block filters %}
+
+<!-- Begin money button group -->
+<div class="btn-group col-xs-12 toggle" data-toggle="buttons">
+    <label class="btn btn-default active">
+        <input type="checkbox" name="price" id="ds1" value="$">$
+    </label>
+    <label class="btn btn-default active">
+        <input type="checkbox" name="price" id="ds2" value="$$">$$
+    </label>
+    <label class="btn btn-default active">
+        <input type="checkbox" name="price" id="ds3" value="$$$">$$$
+    </label>
+    <label class="btn btn-default active">
+        <input type="checkbox" name="price" id="ds4" value="$$$$">$$$$
+    </label>
+</div>  <!-- end money button group -->
+
+
+{% endblock %}
