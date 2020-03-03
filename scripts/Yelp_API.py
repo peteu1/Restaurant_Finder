@@ -4,7 +4,7 @@ import pprint
 import requests
 import urllib
 from yelp.client import Client
-import creds
+from scripts import creds
 
 
 API_HOST = 'https://api.yelp.com'

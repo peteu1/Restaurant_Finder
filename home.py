@@ -1,8 +1,7 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from Yelp_API import Yelp
-import creds
-
+from scripts.Yelp_API import Yelp
+from scripts import creds
 
 app = Flask(__name__)
 
