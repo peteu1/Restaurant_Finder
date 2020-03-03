@@ -3,10 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>Restaurant Finder</title>
-	<script type="text/javascript" src="/{{ url_for('static', filename='js/mapbox-gl.js') }}"></script>
-	<script type="text/javascript" src="/{{ url_for('static', filename='js/jquery-3.4.1.js') }}"></script>
+	<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js"></script>
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
-	<link rel="stylesheet" media="screen" href="/{{ url_for('static', filename='bootstrap.min.css') }}">
   </head>
   <body>
 	<p> This will be the application </p>
@@ -26,7 +24,7 @@
 	    <p>(This will be the list of restaurants)</p>
 	  </div>  <!-- end of list column -->
 	
-	
+	  {% block content %}
 	  <div class="col">
 		  <div id='map' style='width: 400px; height: 300px;'></div>
 		  <script>
@@ -81,5 +79,7 @@
 	</div>
 	{% endblock %}
   </body>
+
+<script type="text/javascript" src="/{{ url_for('static', filename='js/jquery-3.4.1.js') }}"></script>
 
 </html>
