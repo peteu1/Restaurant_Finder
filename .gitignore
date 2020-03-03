@@ -5,7 +5,7 @@
 #creds.py
 
 # Virtual environment
-venv/
+venv/*
 
 # Cache
 __pycache__/*
