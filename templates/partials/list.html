@@ -3,20 +3,33 @@
 <ul>
 {% for result in results %}
     <li>
-        {% if 'alias' in result %}
-            <h4>{{ result.alias }}</h4>
-        {% endif %}
-        {% if 'categories' in result %}
-            <h5>
+        <div style="float:left;width:calc(100%-220px);">
+            {% if 'name' in result %}
+                <h4>{{ result.name }}</h4>
+            {% endif %}
+            {% if 'categories' in result %}
                 {{ result.categories[0].title }}{% if result.categories|length > 1 %}{% for category in result.categories[1:] %}, {{ category.title }}{% endfor %}{% endif %}
-            </h5>
-        {% endif %}
-        <!-- Insert first image 
-        {% if 'alias' in result %}{{ result.alias }}{% endif %}
-        -->
-        {% if result.photos|length > 0 %}
-            <img class="thumb" src={{ result.photos[0] }} alt="image" />
-        {% endif %}
+            {% endif %}
+            <br>
+            {% if 'rating' in result %}
+                Rating: {{ result.rating }}
+            {% endif %}
+            <br>
+            {% if 'display_phone' in result %}
+                {{ result.display_phone }}
+            {% endif %}
+            <br>
+            {% if 'display_address' in result %}
+                {{ result.display_address[0] }}
+            {% endif %}
+        </div>  <!-- end float left -->
+        
+        <div style="float:right;">
+            <!-- Insert first image -->
+            {% if result.photos|length > 0 %}
+                <img class="thumb" src={{ result.photos[0] }} alt="image" />
+            {% endif %}
+        </div>
     </li>
 {% endfor %}
 </ul>

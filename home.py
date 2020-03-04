@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, redirect, url_for
 from scripts.Yelp_API import Restaurants
 from scripts import creds
 
@@ -38,16 +38,21 @@ def restaurant_finder():
     return render_template("app.html", **storedData.collect_data(results))
 
 
-@app.route('/background_process')
+@app.route('/background_process', methods = ['GET', 'POST'])
 def background_process():
-    exclude = request.args['exclude']
-    print("Clicked!!", exclude)
-    prev_results = restaurants.filtered_results
-    restaurants.update_excluded_prices(exclude)
-    new_results = restaurants.filtered_results
-    if len(new_results) != len(prev_results):
-        return render_template("app.html", **storedData.collect_data(new_results))
-    return ("nothing")
+    print("Data:", request.data)
+    return request.data
+    # exclude = request.args['exclude']
+    # print("Clicked!!", exclude)
+    # prev_results = restaurants.filtered_results
+    # new_results = restaurants.update_excluded_prices(exclude)
+    # print("Excluding:", restaurants.exclude_prices)
+    # print("Len old:", len(prev_results))
+    # print("Len new:", len(new_results))
+    # if len(new_results) != len(prev_results):
+    #     print("Length changed!")
+    #     return redirect(url_for("static", filename="app", **storedData.collect_data(new_results)))
+    # return ("nothing")
 
 
 if __name__ == '__main__':

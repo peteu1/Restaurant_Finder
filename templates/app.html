@@ -9,7 +9,7 @@
 </head>
 <body><div class="wrap">
 	{% block content %}
-	<div class="filter-container">
+	<div id="filter-container">
 		<!-- Filter options bar -->
 		{% include  "partials/filters.html" %}
 	</div>
@@ -26,11 +26,13 @@
 		</div>
 	</div>
 
-	<p><strong>Results found:</strong> {{ results|length }}</p>
+	<p>
+		<strong>Results found:</strong> {{ results|length }}
+		<button>Click to load more!</button>
+	</p>
+	
 	<p><strong>center_long:</strong> {{ center_long }}</p>
-	<p><strong>results[0].coordinates.longitude:</strong> {{ results[0].coordinates.longitude }}</p>
-	<p><strong>First result:</strong> {{ results[0].name }}</p>
-	<p><strong>Last result: </strong> {{ results[1].name }}</p>
+	
 	{% endblock %}
 
 </div>  <!-- end wrap div -->

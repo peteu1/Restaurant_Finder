@@ -116,13 +116,13 @@ class Restaurants():
         # TODO: Filter hours?
         self.reload_results()
 
-    def update_excluded_prices(self, exclude=None):
-        if exclude is not None:
+    def update_excluded_prices(self, exclude="0"):
+        if exclude != "0":
             if exclude in self.exclude_prices:
                 self.exclude_prices.remove(exclude)
                 if len(self.exclude_prices) == 0:
-                    self.filtered_results = self.all_results
-                    return None
+                    self.filtered_results = self.all_results.copy()
+                    return self.all_results
             else:
                 self.exclude_prices.append(exclude)
         # Filter on price and remove restaurants with unknown prices
@@ -131,10 +131,11 @@ class Restaurants():
         for result in self.all_results:
             if "price" in list(result.keys()):
                 price_level = len(result['price'])
-                if price_level not in self.exclude_prices:
+                if str(price_level) not in self.exclude_prices:
                     self.filtered_results.append(result)
             else:
                 self.filtered_results.append(result)
+        return self.filtered_results
 # End restaurants Class
 
 

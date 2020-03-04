@@ -4,6 +4,20 @@
 
 <!-- Script to call Python function -->
 <script type="text/javascript">
+    window.onload = function () { console.log({{center_long}}) };
+    function boxChecked(e, t) {
+        var s = 'some data'; // e.value
+        $.ajax({
+            url: '/background_process',
+            type: 'POST',
+            data: s,
+            success: function (res) { console.log(res) }, 
+              // res is the response from the server 
+              // (from return request.data)
+            error: function (error) { console.log(error) }
+        })
+    }
+    /*
     function boxChecked(e, t) {
         if (t.is(':checked')) {
             $(e).find('input').attr('disabled', true)
@@ -13,6 +27,7 @@
         $.getJSON('/background_process?exclude=' + e.value, function(data) { });
         return false;
     }
+    */
 </script>
 
 <div class="ck-button">
