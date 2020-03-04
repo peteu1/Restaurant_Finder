@@ -1,89 +1,27 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from scripts.Yelp_API import Yelp
+from scripts.Yelp_API import Restaurants
 from scripts import creds
 
-app = Flask(__name__)
 
-
-class Restaurants():
+class StoredData():
     def __init__(self):
-        self.yelp = Yelp(creds.API_Key)
-        self.location = "Blacksburg, VA"  # TODO: Get automatically
-        self.meal = "dinner"
-        self.all_results = []
-        self.filtered_results = []
-        self.min_price = 1
-        self.max_price = 4
-        self.num_results = 4  # TODO
+        # TODO: Compute center automatically
+        self.center_long = -80.4137
+        self.center_lat = 37.22922
+        self.zoom = 10
 
-    def reload_results(self):
-        self.all_results = self.yelp.query_api(self.meal, self.location, self.num_results)
-        self.filter_price(self.min_price, self.max_price)
+    def collect_data(self, results):
+        return {
+            'center_long': self.center_long,
+            'center_lat': self.center_lat,
+            'zoom': self.zoom,
+            'results': results,
+        }
 
-    def set_meal(self, meal):
-        self.meal = meal
-        # TODO: Filter hours?
-        self.reload_results()
-
-    def filter_price(self, min_price, max_price):
-        self.min_price = min_price
-        self.max_price = max_price
-        if self.min_price == 1 and self.max_price == 4:
-            self.filtered_results = self.all_results
-            return None
-        # Filter on price and remove restaurants with unknown prices
-        self.filtered_results = []
-        for result in self.all_results:
-            if "price" in result.keys():
-                price_level = len(result.price)
-                if price_level > min_price and price_level < max_price:
-                    self.filtered_results.append(result)
-# End restaurants Class
-
+app = Flask(__name__)
 restaurants = Restaurants()
-
-
-# @app.route('/getmsg/', methods=['GET'])
-# def respond():
-#     # Retrieve the name from url parameter
-#     name = request.args.get("name", None)
-
-#     # For debugging
-#     print(f"got name {name}")
-
-#     response = {}
-
-#     # Check if user sent a name at all
-#     if not name:
-#         response["ERROR"] = "no name found, please send a name."
-#     # Check if the user entered a number not a name
-#     elif str(name).isdigit():
-#         response["ERROR"] = "name can't be numeric."
-#     # Now the user entered a valid name
-#     else:
-#         response["MESSAGE"] = f"Welcome {name} to our awesome platform!!"
-
-#     # Return the response in json format
-#     return jsonify(response)
-
-
-# @app.route('/post/', methods=['POST'])
-# def post_something():
-#     param = request.form.get('name')
-#     print(param)
-#     # You can add the test cases you made in the previous function, but in our case here you are just testing the POST functionality
-#     if param:
-#         return jsonify({
-#             "Message": f"Welcome {name} to our awesome platform!!",
-#             # Add this option to distinct the POST request
-#             "METHOD" : "POST"
-#         })
-#     else:
-#         return jsonify({
-#             "ERROR": "no name found, please send a name."
-#         })
-
+storedData = StoredData()
 
 
 @app.route('/')
@@ -91,18 +29,25 @@ def index():
     return render_template("home.html")
 
 
-@app.route("/restaurant_finder")
+@app.route("/restaurant_finder") #, methods=['GET', 'POST']
 def restaurant_finder():
     restaurants.reload_results()
     results = restaurants.filtered_results
-    # TODO: Compute center automatically
-    kwargs = {
-        'center_long': -80.4137,
-        'center_lat': 37.22922,
-        'zoom': 10,
-        'results': results,
-    }
-    return render_template("app.html", **kwargs)
+    #a = request.form.getlist("money")
+    #print("a:", a)
+    return render_template("app.html", **storedData.collect_data(results))
+
+
+@app.route('/background_process')
+def background_process():
+    exclude = request.args['exclude']
+    print("Clicked!!", exclude)
+    prev_results = restaurants.filtered_results
+    restaurants.update_excluded_prices(exclude)
+    new_results = restaurants.filtered_results
+    if len(new_results) != len(prev_results):
+        return render_template("app.html", **storedData.collect_data(new_results))
+    return ("nothing")
 
 
 if __name__ == '__main__':

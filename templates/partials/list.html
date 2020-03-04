@@ -1,0 +1,26 @@
+{% block list %}
+
+<ul>
+{% for result in results %}
+    <li>
+        {% if 'alias' in result %}
+            <h4>{{ result.alias }}</h4>
+        {% endif %}
+        {% if 'categories' in result %}
+            <h5>
+                {{ result.categories[0].title }}{% if result.categories|length > 1 %}{% for category in result.categories[1:] %}, {{ category.title }}{% endfor %}{% endif %}
+            </h5>
+        {% endif %}
+        <!-- Insert first image 
+        {% if 'alias' in result %}{{ result.alias }}{% endif %}
+        -->
+        {% if result.photos|length > 0 %}
+            <img class="thumb" src={{ result.photos[0] }} alt="image" />
+        {% endif %}
+    </li>
+{% endfor %}
+</ul>
+
+
+
+{% endblock %}

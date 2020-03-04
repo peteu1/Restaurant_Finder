@@ -4,7 +4,8 @@ import pprint
 import requests
 import urllib
 from yelp.client import Client
-from scripts import creds
+from scripts import creds # TODO
+#import creds
 
 
 API_HOST = 'https://api.yelp.com'
@@ -15,7 +16,7 @@ API_KEY = creds.API_Key
 # Defaults for our simple example.
 DEFAULT_TERM = 'dinner'
 DEFAULT_LOCATION = 'Blacksburg, VA'
-DEFAULT_LIMIT = 4
+DEFAULT_LIMIT = 4 # TODO
 
 
 class Yelp():
@@ -96,6 +97,47 @@ class Yelp():
         return results
 
 
+class Restaurants():
+    def __init__(self):
+        self.yelp = Yelp(creds.API_Key)
+        self.location = "Blacksburg, VA"  # TODO: Get automatically
+        self.meal = "dinner"
+        self.all_results = []
+        self.filtered_results = []
+        self.exclude_prices = []
+        self.num_results = 4  # TODO
+
+    def reload_results(self):
+        self.all_results = self.yelp.query_api(self.meal, self.location, self.num_results)
+        self.update_excluded_prices()
+
+    def set_meal(self, meal):
+        self.meal = meal
+        # TODO: Filter hours?
+        self.reload_results()
+
+    def update_excluded_prices(self, exclude=None):
+        if exclude is not None:
+            if exclude in self.exclude_prices:
+                self.exclude_prices.remove(exclude)
+                if len(self.exclude_prices) == 0:
+                    self.filtered_results = self.all_results
+                    return None
+            else:
+                self.exclude_prices.append(exclude)
+        # Filter on price and remove restaurants with unknown prices
+        # TODO: results are permanantly lost on filter somewhere
+        self.filtered_results = []
+        for result in self.all_results:
+            if "price" in list(result.keys()):
+                price_level = len(result['price'])
+                if price_level not in self.exclude_prices:
+                    self.filtered_results.append(result)
+            else:
+                self.filtered_results.append(result)
+# End restaurants Class
+
+
 #def main():
 
 term = DEFAULT_TERM             # help='Search term (default: %(default)s)'
@@ -105,5 +147,5 @@ yelp = Yelp(API_KEY)
 results = yelp.query_api(term, location)  # search_limit
 
 print("\n\nResults:\n")
-#print(results)
+print(results[0])
 

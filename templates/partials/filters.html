@@ -1,0 +1,45 @@
+{% block filters %}
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<!-- Script to call Python function -->
+<script type="text/javascript">
+    function boxChecked(e, t) {
+        if (t.is(':checked')) {
+            $(e).find('input').attr('disabled', true)
+        } else {
+            $(e).find('input').removeAttr('disabled')
+        }
+        $.getJSON('/background_process?exclude=' + e.value, function(data) { });
+        return false;
+    }
+</script>
+
+<div class="ck-button">
+    <label>
+        <input type="checkbox" id="ds1" name="money" value="1" onclick="boxChecked(ds1, $(this));">
+        <span>$</span>
+    </label>
+</div>
+<div class="ck-button">
+    <label>
+        <input type="checkbox" id="ds2" name="money" value="2" onclick="boxChecked(ds2, $(this));">
+        <span>$$</span>
+    </label>
+</div>
+<div class="ck-button">
+    <label>
+        <input type="checkbox" id="ds3" name="money" value="3" onclick="boxChecked(ds3, $(this));">
+        <span>$$$</span>
+    </label>
+</div>
+<div class="ck-button">
+    <label>
+        <input type="checkbox" id="ds4" name="money" value="4" onclick="boxChecked(ds4, $(this));">
+        <span>$$$$</span>
+    </label>
+</div>
+<!-- end money button group -->
+
+
+{% endblock %}
