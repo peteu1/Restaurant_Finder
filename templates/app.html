@@ -5,6 +5,93 @@
     <title>Restaurant Finder</title>
 	<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js"></script>
 	<script type="text/javascript" src="/{{ url_for('static', filename='js/jquery-3.4.1.js') }}"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<!-- Script to call Python function -->
+	<script type="text/javascript">
+		// function boxChecked(e, t) {
+		// 	if (t.is(':checked')) {
+		// 		$(e).find('input').attr('disabled', true)
+		// 		let val = 1;
+		// 	} else {
+		// 		$(e).find('input').removeAttr('disabled')
+		// 		let val = 0;
+		// 	}
+		// 	$.getJSON('/restaurant_finder?exclude' + e.value + "=" + val, function(data) { });
+		// 	return false;
+		// }
+		function toggleBox(e, t) {
+			// if (t.is(':checked')) {
+			// 	$(e).find('input').attr('disabled', true);
+			// } else {
+			// 	$(e).find('input').removeAttr('disabled');																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																															
+			// }
+			// if ($('#cheap')[0].checked) {
+			// 	$('#cheap')[0].checked = false;
+			// } else {
+			// 	$('#cheap')[0].checked = true;
+			// }
+			// if (e1.is(:))
+			// if (t.is(':checked')) {
+			// 	e.prop('checked', false);
+			// } else {
+			// 	e.prop('checked', true);
+			// }
+			returnArgs();
+		}
+		function togglePricey() {
+			// if ($('#pricey')[0].checked) {
+			// 	$('#pricey')[0].checked = true;
+			// } else {
+			// 	$('#pricey')[0].checked = false;
+			// }
+			returnArgs();
+		}
+		function toggleCheap() {
+			// if ($('#cheap')[0].checked) {
+			// 	$('#cheap')[0].checked = true;
+			// } else {
+			// 	$('#cheap')[0].checked = false;
+			// }
+			returnArgs();
+		}
+		function returnArgs() {
+			// let e1 = document.getElementById('cheap');
+			let cheap_checked = $('#cheap')[0].checked ? 1 : 0;
+			//let cheap_checked = e1.value;
+			// let e2 = document.getElementById('pricey');
+			let pricey_checked = $('#pricey')[0].checked ? 1 : 0;
+			//let pricey_checked = e2.value;
+			let sel_food_type = document.getElementById("food_type").selectedIndex;
+			//document.getElementById("food_type").selectedIndex = 1;
+			
+			let vals = {"cheap": cheap_checked, "pricey": pricey_checked, "sel_food_type": sel_food_type};
+			window.location.replace("/restaurant_finder?"  + $.param(vals));
+		}
+		//function returnArgs(minPrice=1, maxPrice=4) {
+		// function returnArgs(e, t) {
+		// 	if (t.is(':checked')) {
+		// 		$(e).find('input').attr('disabled', true)
+		// 		$(e).find('input').attr('checked', false)
+		// 	} else {
+		// 		$(e).find('input').removeAttr('disabled')
+		// 		$(e).find('input').attr('checked', true)
+		// 	}
+		// 	let e1 = document.getElementById('ds1')
+		// 	let val1 = e1.checked ? 1 : 0;
+		// 	let arg1 = "exclude" + e1.value + "=" + val1
+		// 	let e2 = document.getElementById('ds2')
+		// 	let val2 = e2.checked ? 1 : 0;
+		// 	let arg2 = "&exclude" + e2.value + "=" + val2
+		// 	let e3 = document.getElementById('ds3')
+		// 	let val3 = e3.checked ? 1 : 0;
+		// 	let arg3 = "&exclude" + e3.value + "=" + val3
+		// 	let e4 = document.getElementById('ds4')
+		// 	let val4 = e4.checked ? 1 : 0;
+		// 	let arg4 = "&exclude" + e4.value + "=" + val4
+		// 	let new_url = "/restaurant_finder?" + arg1 + arg2 + arg3 + arg4;
+		// 	window.location.replace(new_url);
+		// }
+	</script>
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 </head>
 <body><div class="wrap">

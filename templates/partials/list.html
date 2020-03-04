@@ -2,7 +2,7 @@
 
 <ul>
 {% for result in results %}
-    <li>
+    <li onclick="window.open('{{ result.url }}')">
         <div style="float:left;width:calc(100%-220px);">
             {% if 'name' in result %}
                 <h4>{{ result.name }}</h4>

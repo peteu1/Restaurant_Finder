@@ -2,58 +2,64 @@
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-<!-- Script to call Python function -->
-<script type="text/javascript">
-    window.onload = function () { console.log({{center_long}}) };
-    function boxChecked(e, t) {
-        var s = 'some data'; // e.value
-        $.ajax({
-            url: '/background_process',
-            type: 'POST',
-            data: s,
-            success: function (res) { console.log(res) }, 
-              // res is the response from the server 
-              // (from return request.data)
-            error: function (error) { console.log(error) }
-        })
-    }
-    /*
-    function boxChecked(e, t) {
-        if (t.is(':checked')) {
-            $(e).find('input').attr('disabled', true)
-        } else {
-            $(e).find('input').removeAttr('disabled')
-        }
-        $.getJSON('/background_process?exclude=' + e.value, function(data) { });
-        return false;
-    }
-    */
-</script>
 
 <div class="ck-button">
     <label>
-        <input type="checkbox" id="ds1" name="money" value="1" onclick="boxChecked(ds1, $(this));">
+        <input type="checkbox" id="cheap" name="money" value="1" onclick="toggleCheap();"> <!---->
+        <span>Nothing Cheap</span>
+    </label>
+</div>
+<div class="ck-button">
+    <label>
+        <input type="checkbox" id="pricey" name="money" value="1" onclick="togglePricey();">
+        <span>Nothing Pricey</span>
+    </label>
+</div>
+
+<!-- Search bar -->
+<select style="width: 280px" id="food_type" name="food_type" onchange="returnArgs()">
+    <option>Select Style</option>
+    <option>Italian</option>
+    <option>Brazilian</option>
+    <option>American</option>
+    <option>Chinese</option>
+    <option>Japanese</option>
+    <option>Bar</option>
+</select>
+<script type="text/javascript">
+    // restore selected element
+	document.getElementById("food_type").selectedIndex = "{{ selected_idx }}";
+</script>
+
+
+<!-- Radio group: breakfast lunch dinner -->
+
+<!--
+<div class="ck-button">
+    <label>
+        <input type="checkbox" id="ds1" name="money" value="1" onclick="returnArgs(ds1, $(this));" checked>
         <span>$</span>
     </label>
 </div>
 <div class="ck-button">
     <label>
-        <input type="checkbox" id="ds2" name="money" value="2" onclick="boxChecked(ds2, $(this));">
+        <input type="checkbox" id="ds2" name="money" value="2" onclick="returnArgs(ds2, $(this));" checked>
         <span>$$</span>
     </label>
 </div>
 <div class="ck-button">
     <label>
-        <input type="checkbox" id="ds3" name="money" value="3" onclick="boxChecked(ds3, $(this));">
+        <input type="checkbox" id="ds3" name="money" value="3" onclick="returnArgs(ds3, $(this));" checked>
         <span>$$$</span>
     </label>
 </div>
 <div class="ck-button">
     <label>
-        <input type="checkbox" id="ds4" name="money" value="4" onclick="boxChecked(ds4, $(this));">
+        <input type="checkbox" id="ds4" name="money" value="4" onclick="returnArgs(ds4, $(this));" checked>
         <span>$$$$</span>
     </label>
 </div>
+-->
 <!-- end money button group -->
 
 

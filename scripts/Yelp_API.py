@@ -85,16 +85,7 @@ class Yelp():
             print(f"No businesses for {term} in {location} found.")
             return results
         print(f"{len(businesses)} businesses found.")
-        
-        # TODO: Loop through all results
-        for business in businesses:
-            business_id = business['id']
-            response = self.get_business(business_id)
-            if 'coordinates' in response:
-                print("Adding:", response['name'])
-                results.append(response)
-            #pprint.pprint(response, indent=2)
-        return results
+        return businesses
 
 
 class Restaurants():
@@ -102,40 +93,58 @@ class Restaurants():
         self.yelp = Yelp(creds.API_Key)
         self.location = "Blacksburg, VA"  # TODO: Get automatically
         self.meal = "dinner"
+        #self.all_results_raw = None
+        self.all_businesses = []
         self.all_results = []
         self.filtered_results = []
-        self.exclude_prices = []
+        self.filter_cheap = False
+        self.filter_pricey = False
         self.num_results = 4  # TODO
 
     def reload_results(self):
-        self.all_results = self.yelp.query_api(self.meal, self.location, self.num_results)
-        self.update_excluded_prices()
+        self.all_businesses = self.yelp.query_api(self.meal, self.location, self.num_results)
+        # Get more information for each business that matches current filters
+        self.all_results = []
+        # TODO: Only load those displayed/top 5 at a time?
+        for business in self.all_businesses:
+            business_id = business['id']
+            response = self.yelp.get_business(business_id)
+            if 'coordinates' in response:
+                print("Adding:", response['name'])
+                self.all_results.append(response)
+        self.filtered_results = self.update_excluded_prices()
+        return self.filtered_results
 
     def set_meal(self, meal):
         self.meal = meal
         # TODO: Filter hours?
-        self.reload_results()
+        return self.reload_results()
 
-    def update_excluded_prices(self, exclude="0"):
-        if exclude != "0":
-            if exclude in self.exclude_prices:
-                self.exclude_prices.remove(exclude)
-                if len(self.exclude_prices) == 0:
-                    self.filtered_results = self.all_results.copy()
-                    return self.all_results
-            else:
-                self.exclude_prices.append(exclude)
-        # Filter on price and remove restaurants with unknown prices
-        # TODO: results are permanantly lost on filter somewhere
-        self.filtered_results = []
-        for result in self.all_results:
-            if "price" in list(result.keys()):
-                price_level = len(result['price'])
-                if str(price_level) not in self.exclude_prices:
-                    self.filtered_results.append(result)
-            else:
-                self.filtered_results.append(result)
-        return self.filtered_results
+    def update_excluded_prices(self, cheap=-1, pricey=-1):
+        # TODO: Flawed logic, filters will not be retained when search term changes, this fixed?
+        if cheap >= 0:
+            self.filter_cheap = True if cheap == 1 else False
+            self.filter_pricey = True if pricey == 1 else False
+        if self.filter_cheap or self.filter_pricey:
+            # Filter on price
+            filtered_results = []
+            for result in self.all_results:
+                if "price" in list(result.keys()):
+                    print("Price:", result['price'])
+                    price_level = len(result['price'])
+                    if self.filter_cheap:
+                        if price_level > 2:
+                            filtered_results.append(result)
+                    else:
+                        if price_level < 4:
+                            filtered_results.append(result)
+                else:  # No price level, add regardless
+                    filtered_results.append(result)
+        else:  # No filters, use all results
+            filtered_results = self.all_results.copy()
+        # Store filtered list and return
+        self.filtered_results = filtered_results
+        return filtered_results
 # End restaurants Class
 
 
@@ -144,9 +153,15 @@ class Restaurants():
 term = DEFAULT_TERM             # help='Search term (default: %(default)s)'
 location = DEFAULT_LOCATION     # help='Search location (default: %(default)s)'
 
-yelp = Yelp(API_KEY)
-results = yelp.query_api(term, location)  # search_limit
+# yelp = Yelp(API_KEY)
+# results = yelp.query_api(term, location)  # search_limit
 
-print("\n\nResults:\n")
-print(results[0])
+# print("\n\nResults:\n")
+# print(results[0])
+
+# restaurants = Restaurants()
+# restaurants.reload_results()
+# print("o len:", len(restaurants.all_results))
+# new_r = restaurants.update_excluded_prices(1, 0)
+# print("new len:", len(new_r))
 

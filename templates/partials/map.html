@@ -5,10 +5,10 @@
 <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoianNvbWEiLCJhIjoibFJmYl9JWSJ9.AUm8d76cbOvVEn2mMeG_ZA';
     var map = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/mapbox/streets-v9',
-    center: [{{ center_long }}, {{ center_lat }}],
-    zoom: {{ zoom }}
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v9',
+        center: [{{ center_long }}, {{ center_lat }}],
+        zoom: {{ zoom }}
     });
     var features = []
         {% for result in results %}
