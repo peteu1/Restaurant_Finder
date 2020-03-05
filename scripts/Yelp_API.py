@@ -1,4 +1,5 @@
 import sys
+import os
 import json
 import pprint
 import requests
@@ -116,11 +117,15 @@ class Restaurants():
             response, reviews = self.yelp.get_business(business_id)
             # Only add to all_results if there is location data
             if 'coordinates' in response:
+                # Modify photo url to direct to yelp
+                #if 'image_url' in response: TODO
+                img_ID = os.path.basename(os.path.dirname(response['image_url']))
+                response['all_photos'] = f"https://www.yelp.com/biz_photos/{response['alias']}?select={img_ID}"
                 print("Adding:", response['name'])
                 self.all_results.append(response)
                 self.all_reviews.append(reviews)
-        self.filtered_results, self.filtered_reviews = self.update_excluded_prices()
-        return self.filtered_results, self.filtered_reviews
+        filtered_results, filtered_reviews = self.update_excluded_prices()
+        return filtered_results, filtered_reviews
 
     def set_meal(self, meal):
         """This is the keyword for the Yelp search (not necessarily the meal).
@@ -128,7 +133,8 @@ class Restaurants():
         """
         self.meal = meal
         # TODO: Filter hours?
-        return self.reload_results()
+        filtered_results, filtered_reviews = self.reload_results()
+        return filtered_results, filtered_reviews
 
     def update_excluded_prices(self, cheap=-1, pricey=-1):
         """Filters results based on price without making call to API.
@@ -144,7 +150,7 @@ class Restaurants():
             # Filter on price
             filtered_results = []
             filtered_reviews = []
-            for result, review in zip(self.all_results, self.filtered_reviews):
+            for result, review in zip(self.all_results, self.all_reviews):
                 if "price" in list(result.keys()):
                     print("Price:", result['price'])
                     price_level = len(result['price'])

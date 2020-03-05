@@ -1,47 +1,72 @@
 {% block list %}
 
-<ul>
+<script>
+    function showReviews(bizID) {
+        var x = document.getElementById(bizID);
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+</script>
+
+
+<!-- Loop through each result (business) -->
 {% for result in results %}
-    <li onclick="window.open('{{ result.url }}')">
-        <div style="float:left;width:calc(100%-220px);">
-            {% if 'name' in result %}
-                <h4>{{ result.name }}</h4>
-            {% endif %}
-            {% if 'categories' in result %}
-                {{ result.categories[0].title }}{% if result.categories|length > 1 %}{% for category in result.categories[1:] %}, {{ category.title }}{% endfor %}{% endif %}
-            {% endif %}
-            <br>
-            {% if 'rating' in result %}
-                Rating: {{ result.rating }}
-            {% endif %}
-            <br>
-            {% if 'display_phone' in result %}
-                {{ result.display_phone }}
-            {% endif %}
-            <br>
-            {% if 'location' in result %}
-                {% if 'display_address' in result.location %}
-                    {{ result.location.display_address[0] }}
-                {% endif %}
-            {% endif %}
-            <!-- TODO: Make button, hide reviews until button clicked, then show -->
-            {% if result.reviews|length > 0 %}
-                {% for review in result.reviews %}
-                    <br>
-                    ({{ review.rating }}) {{ review.text }}
-                {% endfor %}
-            {% endif %}
-        </div>  <!-- end float left -->
-        
-        <div style="float:right;">
+    <div style="padding-bottom:20px;margin-bottom:40px;border-bottom: 1px solid black;">  <!-- To separate each element -->
+        <div style="height:210px;margin-top:20px">  <!-- Div containing info, reviews button and picture -->
+            <div style="float:left;width:calc(100%-220px);">  <!-- Wrapper for info and review button (to avoid link opening when review button clicked) -->
+                <div onclick="window.open('{{ result.url }}')">  <!-- Business information -->
+                    <h4 style="margin-bottom:0px;">
+                        {% if 'name' in result %}{{ result.name }}{% else %}{{ result.alias }}{% endif %}
+                    </h4>
+                    <p style="margin-top:8px;margin-bottom:8px;">
+                        {% if 'categories' in result %}
+                            {{ result.categories[0].title }}{% if result.categories|length > 1 %}{% for category in result.categories[1:] %}, {{ category.title }}{% endfor %}{% endif %}
+                        {% endif %}
+                        <br>
+                        {% if 'rating' in result %}
+                            Rating: {{ result.rating }}
+                        {% endif %}
+                        <br>
+                        {% if 'display_phone' in result %}
+                            {{ result.display_phone }}
+                        {% endif %}
+                        <br>
+                        {% if 'location' in result %}
+                            {% if 'display_address' in result.location %}
+                                {{ result.location.display_address[0] }}
+                            {% endif %}
+                        {% endif %}
+                    </p>
+                </div>  <!-- end business information -->
+                <div>  <!-- Button to toggle visibility of reviews -->
+                    {% if result.reviews|length > 0 %}
+                        <button onclick="showReviews('{{ result.id }}')">Reviews</button>
+                    {% endif %}
+                </div>
+            </div>  <!-- end float left wrapper with business info and reviews button -->
             <!-- Insert first image -->
-            {% if result.photos|length > 0 %}
-                <img class="thumb" src={{ result.photos[0] }} alt="image" />
-            {% endif %}
+            <div style="float:right;" onclick="window.open('{{ result.all_photos }}')">
+                {% if result.photos|length > 0 %}
+                    <img class="thumb" src={{ result.photos[0] }} alt="image" />
+                {% endif %}
+            </div>
+        </div>  <!-- End info/picture div -->
+        <!-- (Hidden) reviews -->
+        <div id={{ result.id }} style="display:none;">
+            <p style="margin-bottom: 0px;margin-top:0px;display:block;text-align:left;">
+                {% for review in result.reviews %}
+                    <img src="{{ url_for('static', filename='images/yelp_stars/regular/regular_' + review.rating|string + '.png') }}" alt="(Rating: {{ review.rating }})">
+                    {{ review.text }}
+                    <br>
+                {% endfor %}
+            </p>
         </div>
-    </li>
+    </div>
 {% endfor %}
-</ul>
+
 
 
 
