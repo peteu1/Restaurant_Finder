@@ -65,10 +65,12 @@ class Yelp():
         Args:
             business_id (str): The ID of the business to query.
         Returns:
-            dict: The JSON response from the request.
+            dict: JSON response from request for more business details
+            dict: JSON response from reviews request for business_id
         """
         business_path = BUSINESS_PATH + business_id
-        return self.request(API_HOST, business_path)
+        biz_reviews_path = business_path + "/reviews"
+        return self.request(API_HOST, business_path), self.request(API_HOST, biz_reviews_path)
 
     def query_api(self, term, location, search_limit=DEFAULT_LIMIT):
         """Queries the API by the input values from the user.
@@ -96,7 +98,9 @@ class Restaurants():
         #self.all_results_raw = None
         self.all_businesses = []
         self.all_results = []
+        self.all_reviews = []
         self.filtered_results = []
+        self.filtered_reviews = []
         self.filter_cheap = False
         self.filter_pricey = False
         self.num_results = 4  # TODO
@@ -105,46 +109,63 @@ class Restaurants():
         self.all_businesses = self.yelp.query_api(self.meal, self.location, self.num_results)
         # Get more information for each business that matches current filters
         self.all_results = []
+        self.all_reviews = []
         # TODO: Only load those displayed/top 5 at a time?
         for business in self.all_businesses:
             business_id = business['id']
-            response = self.yelp.get_business(business_id)
+            response, reviews = self.yelp.get_business(business_id)
+            # Only add to all_results if there is location data
             if 'coordinates' in response:
                 print("Adding:", response['name'])
                 self.all_results.append(response)
-        self.filtered_results = self.update_excluded_prices()
-        return self.filtered_results
+                self.all_reviews.append(reviews)
+        self.filtered_results, self.filtered_reviews = self.update_excluded_prices()
+        return self.filtered_results, self.filtered_reviews
 
     def set_meal(self, meal):
+        """This is the keyword for the Yelp search (not necessarily the meal).
+        Runs a new request from the Yelp API with provided search tearm
+        """
         self.meal = meal
         # TODO: Filter hours?
         return self.reload_results()
 
     def update_excluded_prices(self, cheap=-1, pricey=-1):
-        # TODO: Flawed logic, filters will not be retained when search term changes, this fixed?
+        """Filters results based on price without making call to API.
+        Returns:
+            filtered_results (list): all_results filtered by price
+            filtered_reviews (list): all_reviews filtered by price (aligns with results)
+        """
+        # TODO: Flawed logic, filters will not be retained when search term changes..? (Still wrong?)
         if cheap >= 0:
             self.filter_cheap = True if cheap == 1 else False
             self.filter_pricey = True if pricey == 1 else False
         if self.filter_cheap or self.filter_pricey:
             # Filter on price
             filtered_results = []
-            for result in self.all_results:
+            filtered_reviews = []
+            for result, review in zip(self.all_results, self.filtered_reviews):
                 if "price" in list(result.keys()):
                     print("Price:", result['price'])
                     price_level = len(result['price'])
                     if self.filter_cheap:
                         if price_level > 2:
                             filtered_results.append(result)
+                            filtered_reviews.append(review)
                     else:
                         if price_level < 4:
                             filtered_results.append(result)
+                            filtered_reviews.append(review)
                 else:  # No price level, add regardless
                     filtered_results.append(result)
+                    filtered_reviews.append(review)
         else:  # No filters, use all results
             filtered_results = self.all_results.copy()
+            filtered_reviews = self.all_reviews.copy()
         # Store filtered list and return
         self.filtered_results = filtered_results
-        return filtered_results
+        self.filtered_reviews = filtered_reviews
+        return filtered_results, filtered_reviews
 # End restaurants Class
 
 

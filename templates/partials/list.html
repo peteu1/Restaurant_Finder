@@ -19,8 +19,17 @@
                 {{ result.display_phone }}
             {% endif %}
             <br>
-            {% if 'display_address' in result %}
-                {{ result.display_address[0] }}
+            {% if 'location' in result %}
+                {% if 'display_address' in result.location %}
+                    {{ result.location.display_address[0] }}
+                {% endif %}
+            {% endif %}
+            <!-- TODO: Make button, hide reviews until button clicked, then show -->
+            {% if result.reviews|length > 0 %}
+                {% for review in result.reviews %}
+                    <br>
+                    ({{ review.rating }}) {{ review.text }}
+                {% endfor %}
             {% endif %}
         </div>  <!-- end float left -->
         

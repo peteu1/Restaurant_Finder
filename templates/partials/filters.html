@@ -15,25 +15,6 @@
         <span>Nothing Pricey</span>
     </label>
 </div>
-
-<!-- Search bar -->
-<select style="width: 280px" id="food_type" name="food_type" onchange="returnArgs()">
-    <option>Select Style</option>
-    <option>Italian</option>
-    <option>Brazilian</option>
-    <option>American</option>
-    <option>Chinese</option>
-    <option>Japanese</option>
-    <option>Bar</option>
-</select>
-<script type="text/javascript">
-    // restore selected element
-	document.getElementById("food_type").selectedIndex = "{{ selected_idx }}";
-</script>
-
-
-<!-- Radio group: breakfast lunch dinner -->
-
 <!--
 <div class="ck-button">
     <label>
@@ -61,6 +42,25 @@
 </div>
 -->
 <!-- end money button group -->
+
+
+<!-- Search bar -->
+<select style="width: 280px" id="food_type" name="food_type" onchange="returnArgs()">
+    <option>Select Style</option>
+    <option>Italian</option>
+    <option>Brazilian</option>
+    <option>American</option>
+    <option>Chinese</option>
+    <option>Japanese</option>
+    <option>Bar</option>
+</select>
+<script type="text/javascript">
+    // restore selected element
+	document.getElementById("food_type").selectedIndex = "{{ selected_idx }}";
+</script>
+
+
+<!-- Radio group: breakfast lunch dinner (TODO) -->
 
 
 {% endblock %}

@@ -64,7 +64,21 @@
 			let sel_food_type = document.getElementById("food_type").selectedIndex;
 			//document.getElementById("food_type").selectedIndex = 1;
 			
-			let vals = {"cheap": cheap_checked, "pricey": pricey_checked, "sel_food_type": sel_food_type};
+			// if ('{{ location_received }}' == '0') {
+			// 	var lat = 
+			// 	var lon = 
+			// } else {
+			// 	var lat = 40.730610;
+			// 	var lon = -73.935242;
+			// }
+
+			let vals = {
+				"cheap": cheap_checked,
+				"pricey": pricey_checked,
+				"sel_food_type": sel_food_type,
+				"lat": '{{ center_lat }}',
+				"lon": '{{ center_long }}'
+			};
 			window.location.replace("/restaurant_finder?"  + $.param(vals));
 		}
 		//function returnArgs(minPrice=1, maxPrice=4) {
@@ -91,10 +105,60 @@
 		// 	let new_url = "/restaurant_finder?" + arg1 + arg2 + arg3 + arg4;
 		// 	window.location.replace(new_url);
 		// }
+
+		function showPosition() {
+			// Store the element where the page displays the result
+			result = document.getElementById("result");
+			
+			// If geolocation is available, try to get the visitor's position
+			if(navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+				result.innerHTML = "Getting the position information...";
+			} else {
+				result.innerHTML = "Sorry, your browser does not support HTML5 geolocation.";
+			}
+		};
+    
+    // Define callback function for successful attempt
+    function successCallback(position) {
+        result.innerHTML = "Your current position is (" + "Latitude: " + position.coords.latitude + ", " + "Longitude: " + position.coords.longitude + ")";
+    }
+    
+    // Define callback function for failed attempt
+    function errorCallback(error) {
+        if(error.code == 1) {
+            result.innerHTML = "You've decided not to share your position, but it's OK. We won't ask you again.";
+        } else if(error.code == 2) {
+            result.innerHTML = "The network is down or the positioning service can't be reached.";
+        } else if(error.code == 3) {
+            result.innerHTML = "The attempt timed out before it could get the location data.";
+        } else {
+            result.innerHTML = "Geolocation failed due to unknown error.";
+        }
+    }
+
+			// let vals = {"lat": position.coords.latitude, "lon": position.coords.longitude};
+			// window.location.replace("/restaurant_finder?"  + $.param(vals));
+		
+
+		// var x = document.getElementById("demo");
+		// // TODO: only if {{location_received }} = false
+		// function getLocation() {
+		// 	if (navigator.geolocation) {
+		// 		navigator.geolocation.getCurrentPosition(showPosition);
+		// 	} else {
+		// 		x.innerHTML = "Geolocation is not supported by this browser.";
+		// 	}
+		// }
+		// function showPosition(position) {
+		// 	let vals = {"lat": position.coords.latitude, "lon": position.coords.longitude};
+		// 	window.location.replace("/restaurant_finder?"  + $.param(vals));
+		// }
 	</script>
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 </head>
-<body><div class="wrap">
+<body>  <!-- onload="getLocation()" -->
+<div class="wrap">
 	{% block content %}
 	<div id="filter-container">
 		<!-- Filter options bar -->
@@ -120,6 +184,13 @@
 	
 	<p><strong>center_long:</strong> {{ center_long }}</p>
 	
+
+	<div id="result">
+        <!--Position information will be inserted here-->
+    </div>
+    <button type="button" onclick="showPosition();">Show Position</button>
+
+
 	{% endblock %}
 
 </div>  <!-- end wrap div -->
