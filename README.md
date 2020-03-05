@@ -18,25 +18,25 @@ Issues:
 		> I can get:<br/>
 			- some sort of callback from html/css through JS into Python, which I save in Python class attributes.<br/>
 
-2. Location not working.
-	I've deleted most of the code at this point. Tried implementing this: https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API and it did not work due to "network issues". 
+2. Location not working.<br/>
+	I've deleted most of the code at this point. Tried implementing this: https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API and it did not work due to "network issues".<br/>
 	Aparently "Geolocation API" is really simple (only two methods) -- my issue could be in the browser? (I'm using firefox from Ubuntu virtualbox).
-	I also wanted to make a callback to Python with the lat/lon and update home.storedData (defined main.py line 35), so that the location is saved and does not repeatedly ask the user to allow.
-	JS code: templates/app.html
-	HTML code: templates/app.html [attempt to call JS function line 191]
+	I also wanted to make a callback to Python with the lat/lon and update home.storedData (defined main.py line 35), so that the location is saved and does not repeatedly ask the user to allow.<br/>
+	JS code: templates/app.html<br/>
+	HTML code: templates/app.html [attempt to call JS function line 191]<br/>
 
 
-Toggle buttons for meal time (breakfast/lunch/dinner/late night)
-Toggle buttons for popularity (rating, num reviews)
-Get user location
-Get distance user is willing to travel
-Adjust min/ max distance in API request as needed
-Improve efficiency of loading businesses
+Toggle buttons for meal time (breakfast/lunch/dinner/late night)<br/>
+Toggle buttons for popularity (rating, num reviews)<br/>
+Get user location<br/>
+Get distance user is willing to travel<br/>
+Adjust min/ max distance in API request as needed<br/>
+Improve efficiency of loading businesses<br/>
+<br/>
 
-
-Maybe worth my time:
-Loading screen/icon
-div containers: Had to hard code b/c wasted way too much time trying to dynamically do the rows/columns to fit exactly the screen (vh/vw)
+Maybe worth my time:<br/>
+Loading screen/icon<br/>
+div containers: Had to hard code b/c wasted way too much time trying to dynamically do the rows/columns to fit exactly the screen (vh/vw)<br/>
 
 
 Before submission:
