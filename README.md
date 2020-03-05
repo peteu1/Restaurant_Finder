@@ -8,15 +8,15 @@ Link to page: https://restaurant-finder-peteu.herokuapp.com/
 
 Issues:
 1. Checkboxes do not work properly.
-	HTML code: templates/partials/filters.html  [class='ck-button']
-	CSS code: static/css/app.css  [Lines 81-119]
-		> This styles the checkboxes how I'd like, but they are not actually toggling "checked" (probably because I have an onclick() call in the <input> tags in filters.html)
-	JS code: templates/app.html  [<script> tags at top]
-		> I've tried a ton of things (much of it commented out)
-		> I can't get:
-			- a callback to Python [home.py/background_process()] while having the ""check boxes"" (look like buttons) to toggle (the css is supposed to make them change color -- don't get confused with my hover settings, remove cursor after clicking to see if it changes color as intended
-		> I can get:
-			- some sort of callback from html/css through JS into Python, which I save in Python class attributes.
+	HTML code: templates/partials/filters.html  [class='ck-button']  
+	CSS code: static/css/app.css  [Lines 81-119]  
+		> This styles the checkboxes how I'd like, but they are not actually toggling "checked" (probably because I have an onclick() call in the <input> tags in filters.html)  
+	JS code: templates/app.html  [<script> tags at top]  
+		> I've tried a ton of things (much of it commented out)  
+		> I can't get:  
+			- a callback to Python [home.py/background_process()] while having the ""check boxes"" (look like buttons) to toggle (the css is supposed to make them change color -- don't get confused with my hover settings, remove cursor after clicking to see if it changes color as intended  
+		> I can get:  
+			- some sort of callback from html/css through JS into Python, which I save in Python class attributes.  
 
 2. Location not working.
 	I've deleted most of the code at this point. Tried implementing this: https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API and it did not work due to "network issues". 
