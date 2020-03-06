@@ -37,19 +37,26 @@ restaurants = Restaurants()
 storedData = StoredData()
 
 
-@app.route("/test", methods=['POST'])
+@app.route("/test", methods=['POST', 'GET'])
 def test_post():
+    print("Test method:", request.method)
     if request.method == 'POST':
-        names = request.get_json()
+        data = request.get_json()
+        print("Received:", data)
+        names = data["names"]
         for name in names:
             print("Param received:", name)
-        return '', 200
+        return render_template("home.html")
 
-@app.route("/")
+    return render_template("home.html")
+
+@app.route("/", methods=['POST', 'GET'])
 def restaurant_finder():
-    results, reviews = restaurants.reload_results()
-    storedData._template_rendered = True
-    return render_template("app.html", **storedData.collect_data(results, reviews))
+    return render_template("home.html")
+    # TODO: Restore after testing
+    # results, reviews = restaurants.reload_results()
+    # storedData._template_rendered = True
+    # return render_template("app.html", **storedData.collect_data(results, reviews))
 
 
 food_selection_map = {
@@ -95,4 +102,4 @@ def background_process():
 
 if __name__ == '__main__':
     # Threaded option to enable multiple instances for multiple user access support
-    app.run(threaded=True, port=5000, debug=True)
+    app.run(threaded=True, port=5000, debug=False)

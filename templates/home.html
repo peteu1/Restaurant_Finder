@@ -1,15 +1,69 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
+<head>
     <meta charset="utf-8">
     <title>Restaurant Finder</title>
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
-  </head>
-  <body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        function getLocation() {
+            if ({{ location_received }} == '0') {
+                // Store the element where the page displays the result
+                result = document.getElementById("result");
+                // If geolocation is available, try to get the visitor's position
+                if(navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+                    result.innerHTML = "Getting the position information...";
+                } else {
+                    result.innerHTML = "Sorry, your browser does not support HTML5 geolocation.";
+                }
+            } else {
+                result.innerHTML = "Location already on file: {{ center_long }}, {{ center_lat }}"
+                // var lat = 40.730610;
+                // var lon = -73.935242;
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        boxes();
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function boxes(){
+            var names = []
+            names.push('test-val-1');
+    
+            $('#submit').click(function() {
+                names.push($('#testbox').val());
+                console.log(names);
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    url: "/test",
+                    traditional: "true",
+                    data: JSON.stringify({names}),
+                    dataType: "json"
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+  
+    <form action="/" method="post" enctype="multipart/form-data">
+        <label>Name #1 : </label><input type='textbox' id='testbox' name ='mytext'>
+        <input type="submit" value="Submit" id='submit'>
+    </form>
+
+
+
     <h1> Welcome to the launch page for my restaurant finder. </h1>
-	<p> <b> Instructions:</b> Must allow your location, then ... </p>
-    <p> (More information about the application) </p>
-    <br>
-	<a href="{{ url_for('restaurant_finder') }}">Launch Application</a>
-  </body>
+	<p>
+        <b> Instructions:</b> Must allow your location, then ...<br>
+        (More information about the application)
+    </p>
+	<!--<a href="{{ url_for('restaurant_finder') }}">Launch Application</a>-->
+
+
+
+</body>
 </html>
