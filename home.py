@@ -70,9 +70,10 @@ def background_process():
     args = request.args
     print("Data:", args)
     if storedData.location_received == "0":
-        results, reviews = restaurants.reload_results()
-        print("Setting location")
-        storedData.setLatLon(float(args["lat"]), float(args["lon"]))
+        print("Setting location..")
+        lat, lon = float(args["lat"]), float(args["lon"])
+        storedData.setLatLon(lat, lon)
+        results, reviews = restaurants.set_location(lat, lon)
         return render_template("app.html", **storedData.collect_data(results, reviews))
 
     results, reviews = restaurants.update_excluded_prices(int(args['cheap']), int(args['pricey']))

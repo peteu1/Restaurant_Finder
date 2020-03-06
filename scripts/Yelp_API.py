@@ -24,7 +24,7 @@ class Yelp():
     def __init__(self, API_KEY):
         """
         Args:
-            API_KEY (str): 
+            API_KEY (str): my Yelp API key
         """
         self.API_KEY = API_KEY
         self.client = Client(self.API_KEY)
@@ -46,7 +46,7 @@ class Yelp():
         response = requests.request('GET', url, headers=headers, params=url_params)
         return response.json()
 
-    def search(self, term, location, search_limit):
+    def search(self, term, search_limit, location, coords):
         """Query the Search API by a search term and location.
         Args:
             term (str): The search term passed to the API.
@@ -56,9 +56,13 @@ class Yelp():
         """
         url_params = {
             'term': term.replace(' ', '+'),
-            'location': location.replace(' ', '+'),
-            'limit': search_limit
+            'limit': search_limit,
         }
+        if coords != (0,0):
+            url_params['latitude'], url_params['longitude'] = coords
+        else:
+            url_params['location'] = location.replace(' ', '+')
+
         return self.request(API_HOST, SEARCH_PATH, url_params=url_params)
 
     def get_business(self, business_id):
@@ -73,7 +77,7 @@ class Yelp():
         biz_reviews_path = business_path + "/reviews"
         return self.request(API_HOST, business_path), self.request(API_HOST, biz_reviews_path)
 
-    def query_api(self, term, location, search_limit=DEFAULT_LIMIT):
+    def query_api(self, term, search_limit=DEFAULT_LIMIT, location="Blacksburg VA", coords=(0,0)):
         """Queries the API by the input values from the user.
         Args:
             term (str): The search term to query.
@@ -81,7 +85,7 @@ class Yelp():
         Returns:
             (bool): False if no results were found.
         """
-        response = self.search(term, location, search_limit)
+        response = self.search(term, search_limit, location, coords)
         businesses = response.get('businesses')
         results = []
         if not businesses:
@@ -105,9 +109,10 @@ class Restaurants():
         self.filter_cheap = False
         self.filter_pricey = False
         self.num_results = 4  # TODO
+        self.coords = (0,0)
 
     def reload_results(self):
-        self.all_businesses = self.yelp.query_api(self.meal, self.location, self.num_results)
+        self.all_businesses = self.yelp.query_api(self.meal, self.num_results, self.location, self.coords)
         # Get more information for each business that matches current filters
         self.all_results = []
         self.all_reviews = []
@@ -126,6 +131,10 @@ class Restaurants():
                 self.all_reviews.append(reviews)
         filtered_results, filtered_reviews = self.update_excluded_prices()
         return filtered_results, filtered_reviews
+
+    def set_location(self, lat, lon):
+        self.coords = (lat, lon)
+        return self.reload_results()
 
     def set_meal(self, meal):
         """This is the keyword for the Yelp search (not necessarily the meal).
