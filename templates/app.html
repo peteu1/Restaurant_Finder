@@ -63,14 +63,6 @@
 			//let pricey_checked = e2.value;
 			let sel_food_type = document.getElementById("food_type").selectedIndex;
 			//document.getElementById("food_type").selectedIndex = 1;
-			
-			// if ('{{ location_received }}' == '0') {
-			// 	var lat = 
-			// 	var lon = 
-			// } else {
-			// 	var lat = 40.730610;
-			// 	var lon = -73.935242;
-			// }
 			let vals = {
 				"cheap": cheap_checked,
 				"pricey": pricey_checked,
@@ -81,14 +73,20 @@
 			window.location.replace("/restaurant_finder?"  + $.param(vals));
 		}
 		function getLocation() {
-			// Store the element where the page displays the result
-			result = document.getElementById("result");
-			// If geolocation is available, try to get the visitor's position
-			if(navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
-				result.innerHTML = "Getting the position information...";
+			if ('{{ location_received }}' == '0') {
+				// Store the element where the page displays the result
+				result = document.getElementById("result");
+				// If geolocation is available, try to get the visitor's position
+				if(navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+					result.innerHTML = "Getting the position information...";
+				} else {
+					result.innerHTML = "Sorry, your browser does not support HTML5 geolocation.";
+				}
 			} else {
-				result.innerHTML = "Sorry, your browser does not support HTML5 geolocation.";
+				result.innerHTML = "Location already on file: {{ center_long }}, {{ center_lat }}"
+				// var lat = 40.730610;
+				// var lon = -73.935242;
 			}
 		}
 		// Define callback function for successful attempt
