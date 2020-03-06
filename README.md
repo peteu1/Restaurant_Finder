@@ -18,21 +18,22 @@ Issues:
 		> I can get:<br/>
 			- some sort of callback from html/css through JS into Python, which I save in Python class attributes.<br/>
 
-2. Location not working.<br/>
-	UPDATE 3/6/20: The location work is read from Windows after pushing to Heroku. Only problem is efficient testing will be tricky.
-	I've deleted most of the code at this point. Tried implementing this: https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API and it did not work due to "network issues".<br/>
-	Aparently "Geolocation API" is really simple (only two methods) -- my issue could be in the browser? (I'm using firefox from Ubuntu virtualbox).
-	I also wanted to make a callback to Python with the lat/lon and update home.storedData (defined main.py line 35), so that the location is saved and does not repeatedly ask the user to allow.<br/>
-	JS code: templates/app.html<br/>
-	HTML code: templates/app.html [attempt to call JS function line 191]<br/>
+2. Location potential issues.<br/>
+	LITTTT!  Location works from Heroku link. And I think I have the data storage thing figure out so it only asks once.<br/>
+	Possible Issues:<br/>
+		> Requesting yelp API for default (hard-coded) location (Blacksburg) -- inefficient -- before client location is requested. Need to implement a way to load the template (and get client location) before hitting the API; and/or implement a loading screen/wrapper until location is received and proper API results are acquired.
+		> home.py.StoredData() class: Not sure about the scope of this class/variable in Heroku, I don't understand how scopes work when app is published to Heroku (probably the same as any other domain).
+	Dev Issues:<br/>
+		> Difficult to test efficiently, location not working in Ubuntu/localhost environment and Heroku load requires entire Python install (~60 second load)<br/>
 
 
+<br/>
+(Pete can [probably] do all below items)<br/>
+Improve efficiency of loading businesses<br/>
 Toggle buttons for meal time (breakfast/lunch/dinner/late night)<br/>
 Toggle buttons for popularity (rating, num reviews)<br/>
-Get user location<br/>
 Get distance user is willing to travel<br/>
 Adjust min/ max distance in API request as needed<br/>
-Improve efficiency of loading businesses<br/>
 <br/>
 
 Maybe worth my time:<br/>

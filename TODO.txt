@@ -1,13 +1,13 @@
-update readme (mention creds.py)
-update gitignore
+
 Toggle buttons for meal time (breakfast/lunch/dinner/late night)
 Toggle buttons for popularity (rating, num reviews)
-Get user location
 Get distance user is willing to travel
 Adjust min/ max distance in API request as needed
 Improve efficiency of loading businesses
 Link to yelp (icon) next to reviews button
-Link to menu next to reviews button (open in new, smaller window)
+update readme (mention creds.py)
+update gitignore
+
 
 Maybe:
 Loading screen/icon

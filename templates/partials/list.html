@@ -12,6 +12,10 @@
 </script>
 
 
+{% if results|length == 0 %}
+    <h4>Sorry, no results match your filters.</h4>
+{% endif %}
+
 <!-- Loop through each result (business) -->
 {% for result in results %}
     <div style="padding-bottom:20px;margin-bottom:40px;border-bottom: 1px solid black;">  <!-- To separate each element -->
