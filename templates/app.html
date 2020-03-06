@@ -7,37 +7,32 @@
 	<script type="text/javascript" src="/{{ url_for('static', filename='js/jquery-3.4.1.js') }}"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<!-- Script to call Python function -->
+	<!-- <script type="text/javascript">
+        boxes();
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function boxes(){
+            var names = []
+            names.push('test-val-1');
+    
+            $('#submit').click(function() {
+                names.push($('#testbox').val());
+                console.log(names);
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    url: "/test",
+                    traditional: "true",
+                    data: JSON.stringify({names}),
+                    dataType: "json"
+                });
+            });
+        });
+	</script> -->
 	<script type="text/javascript">
-		// function boxChecked(e, t) {
-		// 	if (t.is(':checked')) {
-		// 		$(e).find('input').attr('disabled', true)
-		// 		let val = 1;
-		// 	} else {
-		// 		$(e).find('input').removeAttr('disabled')
-		// 		let val = 0;
-		// 	}
-		// 	$.getJSON('/restaurant_finder?exclude' + e.value + "=" + val, function(data) { });
-		// 	return false;
-		// }
-		function toggleBox(e, t) {
-			// if (t.is(':checked')) {
-			// 	$(e).find('input').attr('disabled', true);
-			// } else {
-			// 	$(e).find('input').removeAttr('disabled');																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																															
-			// }
-			// if ($('#cheap')[0].checked) {
-			// 	$('#cheap')[0].checked = false;
-			// } else {
-			// 	$('#cheap')[0].checked = true;
-			// }
-			// if (e1.is(:))
-			// if (t.is(':checked')) {
-			// 	e.prop('checked', false);
-			// } else {
-			// 	e.prop('checked', true);
-			// }
-			returnArgs();
-		}
+        returnArgs();
+    </script>
+	<script type="text/javascript">
 		function togglePricey() {
 			// if ($('#pricey')[0].checked) {
 			// 	$('#pricey')[0].checked = true;
@@ -54,69 +49,59 @@
 			// }
 			returnArgs();
 		}
-		function returnArgs() {
-			// let e1 = document.getElementById('cheap');
-			let cheap_checked = $('#cheap')[0].checked ? 1 : 0;
-			//let cheap_checked = e1.value;
-			// let e2 = document.getElementById('pricey');
-			let pricey_checked = $('#pricey')[0].checked ? 1 : 0;
-			//let pricey_checked = e2.value;
-			let sel_food_type = document.getElementById("food_type").selectedIndex;
-			//document.getElementById("food_type").selectedIndex = 1;
-			let vals = {
-				"cheap": cheap_checked,
-				"pricey": pricey_checked,
-				"sel_food_type": sel_food_type,
-				"lat": '{{ center_lat }}',
-				"lon": '{{ center_long }}'
-			};
-			window.location.replace("/restaurant_finder?"  + $.param(vals));
-		}
-		function getLocation() {
-			if ({{ location_received }} == '0') {
-				// Store the element where the page displays the result
-				result = document.getElementById("result");
-				// If geolocation is available, try to get the visitor's position
-				if(navigator.geolocation) {
-					navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
-					result.innerHTML = "Getting the position information...";
-				} else {
-					result.innerHTML = "Sorry, your browser does not support HTML5 geolocation.";
-				}
-			} else {
-				result.innerHTML = "Location already on file: {{ center_long }}, {{ center_lat }}"
-				// var lat = 40.730610;
-				// var lon = -73.935242;
-			}
-		}
-		// Define callback function for successful attempt
-		function successCallback(position) {
-			result.innerHTML = "Your current position is (" + "Latitude: " + position.coords.latitude + ", " + "Longitude: " + position.coords.longitude + ")";
-			let vals = {
-				"lat": position.coords.latitude,
-				"lon": position.coords.longitude
-			};
-			window.location.replace("/restaurant_finder?"  + $.param(vals));
-		}
-		// Define callback function for failed attempt
-		function errorCallback(error) {
-			if(error.code == 1) {
-				result.innerHTML = "You've decided not to share your position, but it's OK. We won't ask you again.";
-			} else if(error.code == 2) {
-				result.innerHTML = "The network is down or the positioning service can't be reached.";
-			} else if(error.code == 3) {
-				result.innerHTML = "The attempt timed out before it could get the location data.";
-			} else {
-				result.innerHTML = "Geolocation failed due to unknown error.";
-			}
-		}
-
-			// let vals = {"lat": position.coords.latitude, "lon": position.coords.longitude};
-			// window.location.replace("/restaurant_finder?"  + $.param(vals));
+		// function returnArgs() {
+		// 	// let e1 = document.getElementById('cheap');
+		// 	let cheap_checked = $('#cheap')[0].checked ? 1 : 0;
+		// 	//let cheap_checked = e1.value;
+		// 	// let e2 = document.getElementById('pricey');
+		// 	let pricey_checked = $('#pricey')[0].checked ? 1 : 0;
+		// 	//let pricey_checked = e2.value;
+		// 	let sel_food_type = document.getElementById("food_type").selectedIndex;
+		// 	//document.getElementById("food_type").selectedIndex = 1;
+		// 	let vals = {
+		// 		"cheap": cheap_checked,
+		// 		"pricey": pricey_checked,
+		// 		"sel_food_type": sel_food_type,
+		// 		"lat": '{{ center_lat }}',
+		// 		"lon": '{{ center_long }}'
+		// 	};
+		// 	// window.location.replace("/restaurant_finder?"  + $.param(vals));
+		// }
+		$(document).ready(function returnArgs() {
+            // var args = {
+			// 	"cheap": $('#cheap')[0].checked ? 1 : 0,
+			// 	"pricey": $('#pricey')[0].checked ? 1 : 0
+			// };
+            $('#cheap').click(function() {
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    url: "/restaurant_finder",
+                    traditional: "true",
+                    data: JSON.stringify({"cheap": 1}),
+                    dataType: "json"
+                });
+				window.location.reload();
+            });
+			$('#pricey').click(function() {
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    url: "/restaurant_finder",
+                    traditional: "true",
+                    data: JSON.stringify({"pricey": 1}),
+                    dataType: "json"
+                });
+				// TODO: Can I just reload the map and list: #info-container
+				window.location.reload();
+            });
+        });
 	</script>
+	
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 </head>
-<body onload="getLocation()">  <!--  -->
+<body>  <!--  -->
+<form action="/" method="post" enctype="multipart/form-data">
 <div class="wrap">
 	{% block content %}
 	<div id="filter-container">
@@ -140,19 +125,10 @@
 		<strong>Results found:</strong> {{ results|length }}
 		<button>Click to load more!</button>
 	</p>
-	
-	<p><strong>center_long:</strong> {{ center_long }}</p>
-	
-
-	<div id="result">
-        <!--Position information will be inserted here-->
-    </div>
-    <button type="button" onclick="getLocation();">Show Position</button>
-
-
 	{% endblock %}
 
 </div>  <!-- end wrap div -->
+</form>
 </body>
 
 </html>
