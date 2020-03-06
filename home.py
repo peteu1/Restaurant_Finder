@@ -71,6 +71,7 @@ def background_process():
     print("Data:", args)
     if storedData.location_received == "0":
         results, reviews = restaurants.reload_results()
+        print("Setting location")
         storedData.setLatLon(float(args["lat"]), float(args["lon"]))
         return render_template("app.html", **storedData.collect_data(results, reviews))
 

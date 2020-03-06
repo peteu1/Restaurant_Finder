@@ -73,7 +73,7 @@
 			window.location.replace("/restaurant_finder?"  + $.param(vals));
 		}
 		function getLocation() {
-			if ('{{ location_received }}' == '0') {
+			if ({{ location_received }} == '0') {
 				// Store the element where the page displays the result
 				result = document.getElementById("result");
 				// If geolocation is available, try to get the visitor's position
