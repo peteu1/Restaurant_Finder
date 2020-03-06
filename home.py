@@ -10,19 +10,19 @@ class StoredData():
         self.zoom = 12
         self.center_long = -80.4137  # Blacks
         self.center_lat = 37.22922  # Burg  (You know location isn't working if it shows bburg)
-        self.location_received = "0"  # TODO: This could be combined with _templated_rendered variable. Both effect code same way
+        self.location_received = "0"  # TODO: Render everything but map, then load map when location is requested and receieved. Combine with _templated_rendered
         self._template_rendered = False
 
-    def collect_data(self, results, reviews, selected_idx=0):
+    def setLatLon(self, lat, lon):
+        self.center_long = lon
+        self.center_lat = lat
+        self.location_received = "1"
+
+    def collect_data(self, results, reviews, selected_idx="0"):
         # Add corresp. reviews to each business "result"
         combined_results = results
-        print('len res', len(results))
-        print('len rev', len(reviews))
         for _, review in enumerate(reviews):
             combined_results[_]["reviews"] = review['reviews']
-        if len(reviews):
-            print(results[0])
-            print(reviews[0])
         return {
             'center_long': self.center_long,
             'center_lat': self.center_lat,
@@ -47,11 +47,7 @@ def test_post():
 
 @app.route("/")
 def restaurant_finder():
-    restaurants.reload_results()
-    results = restaurants.all_results
-    reviews = restaurants.all_reviews
-    print("Len orig:", len(results))
-    print("results:", results[0])
+    results, reviews = restaurants.reload_results()
     storedData._template_rendered = True
     return render_template("app.html", **storedData.collect_data(results, reviews))
 
@@ -69,9 +65,15 @@ food_selection_map = {
 @app.route('/restaurant_finder')
 def background_process():
     if not storedData._template_rendered:
-        restaurants.reload_results()
+        # If page is loaded for first time directly from a URL with parameters (rather than "/")
+        restaurants.reload_results()  # TODO: Need this? Make more efficient?
     args = request.args
     print("Data:", args)
+    if storedData.location_received == "0":
+        results, reviews = restaurants.reload_results()
+        storedData.setLatLon(float(args["lat"]), float(args["lon"]))
+        return render_template("app.html", **storedData.collect_data(results, reviews))
+
     results, reviews = restaurants.update_excluded_prices(int(args['cheap']), int(args['pricey']))
     # TODO: Implement option in html to view the reviews (max 3)
     food_idx = args['sel_food_type']

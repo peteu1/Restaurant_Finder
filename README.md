@@ -19,6 +19,7 @@ Issues:
 			- some sort of callback from html/css through JS into Python, which I save in Python class attributes.<br/>
 
 2. Location not working.<br/>
+	UPDATE 3/6/20: The location work is read from Windows after pushing to Heroku. Only problem is efficient testing will be tricky.
 	I've deleted most of the code at this point. Tried implementing this: https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API and it did not work due to "network issues".<br/>
 	Aparently "Geolocation API" is really simple (only two methods) -- my issue could be in the browser? (I'm using firefox from Ubuntu virtualbox).
 	I also wanted to make a callback to Python with the lat/lon and update home.storedData (defined main.py line 35), so that the location is saved and does not repeatedly ask the user to allow.<br/>
