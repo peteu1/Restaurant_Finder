@@ -7,28 +7,25 @@
 	<script type="text/javascript" src="/{{ url_for('static', filename='js/jquery-3.4.1.js') }}"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<!-- Script to call Python function -->
-	<!-- <script type="text/javascript">
+	<script type="text/javascript">
         boxes();
     </script>
     <script type="text/javascript">
-        $(document).ready(function boxes(){
-            var names = []
-            names.push('test-val-1');
-    
+        $(document).ready(function boxes() {
             $('#submit').click(function() {
-                names.push($('#testbox').val());
-                console.log(names);
+                var search = {'term': $('#testbox').val()};
                 $.ajax({
                     type: "POST",
                     contentType: "application/json;charset=utf-8",
-                    url: "/test",
+                    url: "/restaurant_finder",
                     traditional: "true",
-                    data: JSON.stringify({names}),
+                    data: JSON.stringify(search),
                     dataType: "json"
                 });
+				window.location.reload();
             });
         });
-	</script> -->
+	</script>
 	<script type="text/javascript">
         returnArgs();
     </script>

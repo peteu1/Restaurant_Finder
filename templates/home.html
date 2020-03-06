@@ -8,14 +8,6 @@
     <script type="text/javascript">
         function postLocation(lat, lon) {
             var location = {"lat": lat, "lon": lon};
-            // $.ajax({
-            //     type: "POST",
-            //     contentType: "application/json;charset=utf-8",
-            //     url: "/getLocation",
-            //     traditional: "true",
-            //     data: JSON.stringify(location),
-            //     dataType: "json"
-            // });
             window.location.replace("/restaurant_finder?" + $.param(location));
         }
         function getLocation() {
@@ -50,45 +42,16 @@
             postLocation(40.730610, -73.935242);
 		}
     </script>
-    <script type="text/javascript">
-        boxes();
-    </script>
-    <script type="text/javascript">
-        $(document).ready(function boxes(){
-            var names = []
-            $('#submit').click(function() {
-                names.push($('#testbox').val());
-                console.log(names);
-                $.ajax({
-                    type: "POST",
-                    contentType: "application/json;charset=utf-8",
-                    url: "/test",
-                    traditional: "true",
-                    data: JSON.stringify({names}),
-                    dataType: "json"
-                });
-            });
-        });
-    </script>
 </head>
 
 <body onload="getLocation()">
   
-    <form action="/" method="post" enctype="multipart/form-data">
-        <label>Name #1 : </label><input type='textbox' id='testbox' name ='mytext'>
-        <input type="submit" value="Submit" id='submit'>
-    </form>
-
-
-
     <h1> Welcome to the launch page for my restaurant finder. </h1>
 	<p>
         <b> Instructions:</b> Must allow your location, then ...<br>
         (More information about the application)
     </p>
 	<!--<a href="{{ url_for('restaurant_finder') }}">Launch Application</a>-->
-
-
 
 	<div id="result">
         <!--Position information will be inserted here-->

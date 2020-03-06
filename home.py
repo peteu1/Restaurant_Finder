@@ -87,15 +87,15 @@ def background_process():
 
     if request.method == 'POST':
         data = request.get_json()
-        print("Received:", data)
+        print("Received:", data)  # TODO: Search term not working properly
         # TODO: Properly track these and toggle values
+        cheap = 0
+        pricey = 0
         if 'cheap' in data.keys():
             print("Cheap clicked!")
             cheap = 1
-            pricey = 0
         if 'pricey' in data.keys():
             print("Pricey clicked!")
-            cheap = 0
             pricey = 1
         results, reviews = restaurants.update_excluded_prices(cheap, pricey)
     else:
