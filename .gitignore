@@ -12,6 +12,6 @@ __pycache__/*
 .vscode/*
 
 # Personal/Notes
-TODO.txt
-Commands.txt
+#TODO.txt
+#Commands.txt
 archive/*
