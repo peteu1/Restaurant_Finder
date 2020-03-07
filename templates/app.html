@@ -24,6 +24,23 @@
                 });
 				window.location.reload();
             });
+			// If user hits <enter>
+			$('#testbox').keypress(function(event) {
+				var keycode = (event.keyCode ? event.keyCode : event.which); 
+				if(keycode == '13'){ 
+					var search = {'term': $('#testbox').val()};
+					$.ajax({
+						type: "POST",
+						contentType: "application/json;charset=utf-8",
+						url: "/restaurant_finder",
+						traditional: "true",
+						data: JSON.stringify(search),
+						dataType: "json"
+					});
+					window.location.reload();
+				} 
+				event.stopPropagation();
+            });
         });
 	</script>
 	<script type="text/javascript">
@@ -92,13 +109,25 @@
 				// TODO: Can I just reload the map and list: #info-container
 				window.location.reload();
             });
+			$('food_type').change(function() {
+				let sel_food_type = document.getElementById("food_type").selectedIndex
+				$.ajax({
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    url: "/restaurant_finder",
+                    traditional: "true",
+                    data: JSON.stringify({"sel_food_type": sel_food_type}),
+                    dataType: "json"
+                });
+				window.location.reload();
+			});
         });
 	</script>
 	
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 </head>
 <body>  <!--  -->
-<form action="/" method="post" enctype="multipart/form-data">
+
 <div class="wrap">
 	{% block content %}
 	<div id="filter-container">
@@ -125,7 +154,7 @@
 	{% endblock %}
 
 </div>  <!-- end wrap div -->
-</form>
+
 </body>
 
 </html>

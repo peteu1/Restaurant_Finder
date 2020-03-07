@@ -77,6 +77,7 @@ def background_process():
     print("> background_process() called")
     args = request.args
     print("Data:", args)
+    print("Method:", request.method)
     if storedData.location_received == "0":
         print("Setting location..")
         lat, lon = float(args["lat"]), float(args["lon"])
@@ -94,10 +95,14 @@ def background_process():
         if 'cheap' in data.keys():
             print("Cheap clicked!")
             cheap = 1
+            results, reviews = restaurants.update_excluded_prices(cheap, pricey)
         if 'pricey' in data.keys():
             print("Pricey clicked!")
             pricey = 1
-        results, reviews = restaurants.update_excluded_prices(cheap, pricey)
+            results, reviews = restaurants.update_excluded_prices(cheap, pricey)
+        if 'term' in data.keys():
+            print("> Term supplied:", data['term'])
+            results, reviews = restaurants.set_meal(data['term'])
     else:
         results, reviews = restaurants.reload_results()
     # food_idx = args['sel_food_type']
