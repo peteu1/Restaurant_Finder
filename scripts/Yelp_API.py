@@ -157,9 +157,9 @@ class Restaurants():
             all_reviews = self.all_reviews.copy()
         if load_more:
             return self.reload_results(load_more)
-
-        self.filter_cheap = bool(cheap)
-        self.filter_pricey = bool(pricey)
+        if cheap >= 0 and pricey >= 0:
+            self.filter_cheap = bool(cheap)
+            self.filter_pricey = bool(pricey)
         if self.filter_cheap or self.filter_pricey:
             # Filter price
             filtered_results = []
