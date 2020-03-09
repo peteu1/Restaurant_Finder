@@ -86,12 +86,13 @@ def restaurant_finder():
 
 @app.route('/restaurant_finder', methods=['GET', 'POST'])
 def index():
-    print("Globals", globals())
-    if 'storedData' not in globals():
-        global storedData
-        storedData = StoredData()
     global storedData
-    term = storedData.term
+    print("Globals", globals())
+    try:
+        term = storedData.term
+    except:
+        storedData = StoredData()
+        term = storedData.term
     searchForm = SearchForm()
     args = request.args
     print("Data:", args)
