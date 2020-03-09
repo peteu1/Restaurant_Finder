@@ -1,24 +1,19 @@
 
-Toggle buttons for meal time (breakfast/lunch/dinner/late night)
-Toggle buttons for popularity (rating, num reviews)
-Get distance user is willing to travel
-Adjust min/ max distance in API request as needed
-Improve efficiency of loading businesses
-Link to yelp (icon) next to reviews button
+New features:<br/>
+Toggle buttons for meal time (breakfast/lunch/dinner/late night)<br/>
+Toggle buttons for popularity (rating, num reviews)<br/>
+Get distance user is willing to travel<br/>
+Adjust min/ max distance in API request as needed<br/>
+Link to yelp (icon) next to reviews button<br/>
+Loading screen/icon<br/>
+<br/>
+
+Improve features:<br/>
+Improve efficiency of loading businesses (use threading, background process)<br/>
+Remove hard code of div containers, dynamically fit screen (vh/vw)<br/>
+<br/>
+
+Before submission:
 update readme (mention creds.py)
-update gitignore
+update gitignore (remove creds.py)
 
-
-Maybe:
-Loading screen/icon
-
-
-Make reviews better:
-<!-- To embed reviews (not clean enough, would need to modify things)
-<span class="yelp-review" data-review-id={{ review.id }} data-hostname="www.yelp.com">
-    Read <a href={{ review.user.profile_url }} rel="nofollow noopener">{{ review.user.name }}
-    </a>'s <a href="https://www.yelp.com/biz/{{ results.alias }}?hrid={{ review.id }}" rel="nofollow noopener">review
-    </a> of <a href="https://www.yelp.com/biz/{{ results.id }}" rel="nofollow noopener">{{ result.name }}
-    </a> on <a href="https://www.yelp.com" rel="nofollow noopener">Yelp</a>
-    <script async="async" src="https://www.yelp.com/embed/widgets.js" type="text/javascript"></script>
-</span> -->
