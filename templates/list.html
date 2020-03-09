@@ -46,7 +46,7 @@
         </div>  <!-- End info/picture div -->
         <!-- (Hidden) reviews -->
         <div id={{ result.id }} style="display:none;">
-            <p style="margin-bottom: 0px;margin-top:0px;display:block;text-align:left;">
+            <p style="margin-bottom: 0px;margin-top:8px;display:block;text-align:left;">
                 {% for review in result.reviews %}
                     <img src="{{ url_for('static', filename='images/yelp_stars/regular/regular_' + review.rating|string + '.png') }}" alt="(Rating: {{ review.rating }})">
                     {{ review.text }}

@@ -86,6 +86,9 @@ def restaurant_finder():
 
 @app.route('/restaurant_finder', methods=['GET', 'POST'])
 def index():
+    if 'storedData' in globals():
+        global storedData
+        storedData = StoredData()
     term = storedData.term
     searchForm = SearchForm()
     args = request.args
@@ -103,7 +106,6 @@ def index():
         results, reviews = restaurants.reload_results()
         kwargs = storedData.collect_data(results, reviews, term, searchForm)
     if request.method == "POST":
-        print("KJLDASKF:", request.form)
         if searchForm.validate_on_submit():
             # Get entered search term
             term = searchForm.term.data
