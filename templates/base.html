@@ -12,7 +12,6 @@
     <h5>Welcome to the Restaurant Finder. Select a type of food, or enter you're own.</h5>
     <!-- Filter options bar -->
     <div id="filter-container">{% block filter_content %}{% endblock %}</div>
-    <strong>Results found: {{ results|length }}</strong>
     <div id="info-container">
         <!-- Create list -->
         <div id="list-container">{% include "list.html" %}</div>
@@ -20,9 +19,13 @@
         <!-- Draw map -->
         <div id="map-container">{% include "map.html" %}</div>
     </div>
-    <p>
-		<button>Click to load more!</button>
-	</p>
+    <div id="bottom-container">
+        <strong>Results found: {{ results|length }}</strong>
+        <button>Click to load more!</button><br>
+        <div onclick="window.open('www.yelp.com')">
+            Powered by: Yelp <img src="{{ url_for('static', filename='images/burst_icon.png') }}" alt="Logo">
+        </div>
+	</div>
 </div>
 {% endblock %}
 

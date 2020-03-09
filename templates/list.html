@@ -8,9 +8,9 @@
         <div style="height:210px;margin-top:20px">  <!-- Div containing info, reviews button and picture -->
             <div style="float:left;width:calc(100%-220px);">  <!-- Wrapper for info and review button (to avoid link opening when review button clicked) -->
                 <div onclick="window.open('{{ result.url }}')">  <!-- Business information -->
-                    <h4 style="margin-bottom:0px;">
+                    <h3 style="margin-bottom:0px;">
                         {% if 'name' in result %}{{ result.name }}{% else %}{{ result.alias }}{% endif %}
-                    </h4>
+                    </h3>
                     <p style="margin-top:8px;margin-bottom:8px;">
                         {% if 'categories' in result %}
                             {{ result.categories[0].title }}{% if result.categories|length > 1 %}{% for category in result.categories[1:] %}, {{ category.title }}{% endfor %}{% endif %}

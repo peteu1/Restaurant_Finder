@@ -57,6 +57,10 @@ body {
     width: 45%;
 }
 
+#bottom-container {
+    margin-top: 16px;
+}
+
 .thumb {
     object-fit: cover;
     width: 200px;
