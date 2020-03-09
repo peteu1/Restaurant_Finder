@@ -6,12 +6,12 @@
 {% for result in results %}
     <div style="padding-bottom:20px;margin-bottom:40px;border-bottom: 1px solid black;">  <!-- To separate each element -->
         <div style="height:210px;margin-top:20px">  <!-- Div containing info, reviews button and picture -->
-            <div style="float:left;width:calc(100%-220px);max-width:calc(100%-220px);word-wrap:break-word;">  <!-- Wrapper for info and review button (to avoid link opening when review button clicked) -->
-                <div onclick="window.open('{{ result.url }}')" title="Click to see more on Yelp!">  <!-- Business information -->
-                    <h3 style="margin-bottom:0px;">
-                        {% if 'name' in result %}{{ result.name }}{% else %}{{ result.alias }}{% endif %}
+            <div style="float:left;width:calc(100%-250px);">  <!-- Wrapper for info and review button (to avoid link opening when review button clicked) -->
+                <div onclick="window.open('{{ result.url }}')" title="Click to see more on Yelp!" style="max-width:calc(100%-250px);word-wrap:break-word;">  <!-- Business information -->
+                    <h3 style="margin-bottom:0px;max-width:calc(100%-250px);word-wrap:break-word;">
+                        {% if 'name' in result %}{{ result.name|truncate(35) }}{% else %}{{ result.alias }}{% endif %}
                     </h3>
-                    <p style="margin-top:8px;margin-bottom:8px;max-width:calc(100%-220px);word-wrap:break-word;">
+                    <p style="margin-top:8px;margin-bottom:8px;max-width:calc(100%-250px);word-wrap:break-word;">
                         {% if 'categories' in result %}
                             {{ result.categories[0].title }}{% if result.categories|length > 1 %}{% for category in result.categories[1:] %}, {{ category.title }}{% endfor %}{% endif %}
                         {% endif %}

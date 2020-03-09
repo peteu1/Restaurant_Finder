@@ -77,6 +77,7 @@ class Yelp():
         result = self.request(API_HOST, business_path)
         # Align rating with image name for stars
         result['rating'] = str(result['rating']) if (result['rating'] % 1) == 0 else f"{str(int(result['rating']))}_half"
+        result['name'] = result['name'].replace('&', 'And')
         review = self.request(API_HOST, biz_reviews_path)
         return result, review
 
