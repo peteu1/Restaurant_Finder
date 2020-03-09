@@ -11,7 +11,6 @@
             window.location.replace("/restaurant_finder?" + $.param(location));
         }
         function getLocation() {
-            /*if ({{ location_received }} == '0') {*/
             // Store the element where the page displays the result
             result = document.getElementById("result");
             // If geolocation is available, try to get the visitor's position
@@ -47,16 +46,17 @@
 <body onload="getLocation()">
   
     <h1> Welcome to the launch page for my restaurant finder. </h1>
+    <br>
+    <br>
+    <br>
 	<p>
         <b> Instructions:</b> Must allow your location, then ...<br>
-        (More information about the application)
     </p>
 	<!--<a href="{{ url_for('restaurant_finder') }}">Launch Application</a>-->
 
 	<div id="result">
         <!--Position information will be inserted here-->
     </div>
-    <button type="button" onclick="getLocation();">Show Position</button>
 
 
 </body>

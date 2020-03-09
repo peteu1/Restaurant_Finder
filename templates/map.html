@@ -1,7 +1,10 @@
 {% block map %}
 
-<div id='map' style='width: 100%; height: 100%;'></div>
+<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js"></script>
+<script type="text/javascript" src="/{{ url_for('static', filename='js/jquery-3.4.1.js') }}"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
+<div id='map' style='width: 100%; height: 100%;'></div>
 <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoianNvbWEiLCJhIjoibFJmYl9JWSJ9.AUm8d76cbOvVEn2mMeG_ZA';
     var map = new mapboxgl.Map({
@@ -11,7 +14,7 @@
         zoom: {{ zoom }}
     });
     var features = []
-        {% for result in results %}
+    {% for result in results %}
         features.push({
             "type": "Feature",
             "geometry": {
@@ -22,7 +25,7 @@
                 ]
             }
         })
-        {% endfor %}
+    {% endfor %}
     map.on('load', function() {
         var geojsonData = {
             "type": "FeatureCollection",

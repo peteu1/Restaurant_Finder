@@ -1,21 +1,7 @@
-{% block list %}
-
-<script>
-    function showReviews(bizID) {
-        var x = document.getElementById(bizID);
-        if (x.style.display === "none") {
-            x.style.display = "block";
-        } else {
-            x.style.display = "none";
-        }
-    }
-</script>
-
-
+{% block list_content %}
 {% if results|length == 0 %}
     <h4>Sorry, no results match your filters.</h4>
 {% endif %}
-
 <!-- Loop through each result (business) -->
 {% for result in results %}
     <div style="padding-bottom:20px;margin-bottom:40px;border-bottom: 1px solid black;">  <!-- To separate each element -->
@@ -70,8 +56,14 @@
         </div>
     </div>
 {% endfor %}
-
-
-
-
+<script>
+    function showReviews(bizID) {
+        var x = document.getElementById(bizID);
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+</script>
 {% endblock %}

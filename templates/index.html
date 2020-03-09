@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block filter_content %}
+<!-- {{ wtf.quick_form(searchForm) }} -->
+<form method="POST">
+    {{ searchForm.hidden_tag() }}
+    {{ searchForm.selectedTerm.label }}
+    {{ searchForm.selectedTerm() }}
+    {{ searchForm.term.label }}
+    {{ searchForm.term(id='my-text-field') }}
+    {{ searchForm.submit() }}
+</form>
+{% if term != "dinner" %}Search term: "{{ term }}"{% endif %}
+
+<form method="POST">
+    {% if cheap %}
+    <button type=submit class="btn btn-default btn-on" name="cheap" value="on">
+        Nothing<br>Cheap
+    </button>
+    {% else %}
+    <button type=submit class="btn btn-default btn-off" name="cheap" value="off">
+        Nothing<br>Cheap
+    </button>
+    {% endif %}
+</form>
+
+<form method="POST">
+    {% if pricey %}
+    <button type=submit class="btn btn-default btn-on" name="pricey" value="on">
+        Nothing<br>Pricey
+    </button>
+    {% else %}
+    <button type=submit class="btn btn-default btn-off" name="pricey" value="off">
+        Nothing<br>Pricey
+    </button>
+    {% endif %}
+</form>
+
+{% endblock %}

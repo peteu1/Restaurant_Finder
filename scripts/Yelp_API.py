@@ -62,7 +62,6 @@ class Yelp():
             url_params['latitude'], url_params['longitude'] = coords
         else:
             url_params['location'] = location.replace(' ', '+')
-
         return self.request(API_HOST, SEARCH_PATH, url_params=url_params)
 
     def get_business(self, business_id):
@@ -96,20 +95,16 @@ class Yelp():
 
 
 class Restaurants():
-    def __init__(self):
+    def __init__(self, lat, lon):
         self.yelp = Yelp(creds.API_Key)
-        self.location = "Blacksburg, VA"  # TODO: Get automatically
-        self.meal = "dinner"
-        #self.all_results_raw = None
+        self.coords = (lat, lon)
+        self.location = "Blacksburg, VA"  # TODO: Let user type location if get location fails
+        self.meal = "dinner"  # Search term
         self.all_businesses = []
-        self.all_results = []
-        self.all_reviews = []
-        self.filtered_results = []
-        self.filtered_reviews = []
-        self.filter_cheap = False
-        self.filter_pricey = False
+        self.all_results = self.all_reviews = []
+        self.filtered_results = self.filtered_reviews = []
+        self.filter_cheap = self.filter_pricey = False
         self.num_results = 4  # TODO
-        self.coords = (0,0)
 
     def reload_results(self):
         self.all_businesses = self.yelp.query_api(self.meal, self.num_results, self.location, self.coords)
@@ -129,75 +124,51 @@ class Restaurants():
                 print("Adding:", response['name'])
                 self.all_results.append(response)
                 self.all_reviews.append(reviews)
-        filtered_results, filtered_reviews = self.update_excluded_prices()
-        return filtered_results, filtered_reviews
+        self.filtered_results = self.all_results
+        self.filtered_reviews = self.all_reviews
+        #filtered_results, filtered_reviews = self.update_excluded_prices()
+        #return filtered_results, filtered_reviews
+        return self.all_results, self.all_reviews
 
-    def set_location(self, lat, lon):
-        self.coords = (lat, lon)
-        return self.reload_results()
-
-    def set_meal(self, meal):
-        """This is the keyword for the Yelp search (not necessarily the meal).
-        Runs a new request from the Yelp API with provided search tearm
-        """
-        self.meal = meal
-        # TODO: Filter hours?
-        filtered_results, filtered_reviews = self.reload_results()
-        return filtered_results, filtered_reviews
-
-    def update_excluded_prices(self, cheap=-1, pricey=-1):
+    def update_search_terms(self, cheap=-1, pricey=-1, term=None):
         """Filters results based on price without making call to API.
         Returns:
             filtered_results (list): all_results filtered by price
             filtered_reviews (list): all_reviews filtered by price (aligns with results)
         """
-        # TODO: Flawed logic, filters will not be retained when search term changes..? (Still wrong?)
-        if cheap >= 0:
-            self.filter_cheap = True if cheap == 1 else False
-            self.filter_pricey = True if pricey == 1 else False
+        print("\n\n> update_search_terms() called", cheap, pricey, term)
+        if term != self.meal and term != None:
+            self.meal = term
+            print("> Setting self.meal to:", term)
+            # Reload results
+            all_results, all_reviews = self.reload_results()
+        else:
+            all_results = self.all_results.copy()
+            all_reviews = self.all_reviews.copy()
+        
+        self.filter_cheap = bool(cheap)
+        self.filter_pricey = bool(pricey)
         if self.filter_cheap or self.filter_pricey:
-            # Filter on price
+            # Filter price
             filtered_results = []
             filtered_reviews = []
             for result, review in zip(self.all_results, self.all_reviews):
                 if "price" in list(result.keys()):
                     print("Price:", result['price'])
                     price_level = len(result['price'])
-                    if self.filter_cheap:
-                        if price_level > 2:
-                            filtered_results.append(result)
-                            filtered_reviews.append(review)
+                    if (self.filter_cheap and price_level <= 1) or (self.filter_pricey and price_level >= 3):
+                        pass
                     else:
-                        if price_level < 4:
-                            filtered_results.append(result)
-                            filtered_reviews.append(review)
+                        filtered_results.append(result)
+                        filtered_reviews.append(review)
                 else:  # No price level, add regardless
                     filtered_results.append(result)
                     filtered_reviews.append(review)
-        else:  # No filters, use all results
-            filtered_results = self.all_results.copy()
-            filtered_reviews = self.all_reviews.copy()
+        else:  # No price filters, use all results
+            filtered_results = all_results
+            filtered_reviews = all_reviews
         # Store filtered list and return
         self.filtered_results = filtered_results
         self.filtered_reviews = filtered_reviews
         return filtered_results, filtered_reviews
 # End restaurants Class
-
-
-#def main():
-
-term = DEFAULT_TERM             # help='Search term (default: %(default)s)'
-location = DEFAULT_LOCATION     # help='Search location (default: %(default)s)'
-
-# yelp = Yelp(API_KEY)
-# results = yelp.query_api(term, location)  # search_limit
-
-# print("\n\nResults:\n")
-# print(results[0])
-
-# restaurants = Restaurants()
-# restaurants.reload_results()
-# print("o len:", len(restaurants.all_results))
-# new_r = restaurants.update_excluded_prices(1, 0)
-# print("new len:", len(new_r))
-
