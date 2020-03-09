@@ -6,18 +6,18 @@
 {% for result in results %}
     <div style="padding-bottom:20px;margin-bottom:40px;border-bottom: 1px solid black;">  <!-- To separate each element -->
         <div style="height:210px;margin-top:20px">  <!-- Div containing info, reviews button and picture -->
-            <div style="float:left;width:calc(100%-220px);">  <!-- Wrapper for info and review button (to avoid link opening when review button clicked) -->
-                <div onclick="window.open('{{ result.url }}')">  <!-- Business information -->
+            <div style="float:left;width:calc(100%-220px);max-width:calc(100%-220px);word-wrap:break-word;">  <!-- Wrapper for info and review button (to avoid link opening when review button clicked) -->
+                <div onclick="window.open('{{ result.url }}')" title="Click to see more on Yelp!">  <!-- Business information -->
                     <h3 style="margin-bottom:0px;">
                         {% if 'name' in result %}{{ result.name }}{% else %}{{ result.alias }}{% endif %}
                     </h3>
-                    <p style="margin-top:8px;margin-bottom:8px;">
+                    <p style="margin-top:8px;margin-bottom:8px;max-width:calc(100%-220px);word-wrap:break-word;">
                         {% if 'categories' in result %}
                             {{ result.categories[0].title }}{% if result.categories|length > 1 %}{% for category in result.categories[1:] %}, {{ category.title }}{% endfor %}{% endif %}
                         {% endif %}
                         <br>
                         {% if 'rating' in result %}
-                            Rating: {{ result.rating }}
+                            <img src="{{ url_for('static', filename='images/yelp_stars/regular/regular_' + result.rating + '.png') }}" alt="Rating: {{ result.rating }}">
                         {% endif %}
                         <br>
                         {% if 'display_phone' in result %}
@@ -38,7 +38,7 @@
                 </div>
             </div>  <!-- end float left wrapper with business info and reviews button -->
             <!-- Insert first image -->
-            <div style="float:right;" onclick="window.open('{{ result.all_photos }}')">
+            <div style="float:right;" onclick="window.open('{{ result.all_photos }}')" title="Click for more photos!">
                 {% if result.photos|length > 0 %}
                     <img class="thumb" src={{ result.photos[0] }} alt="image" />
                 {% endif %}
@@ -48,8 +48,10 @@
         <div id={{ result.id }} style="display:none;">
             <p style="margin-bottom: 0px;margin-top:8px;display:block;text-align:left;">
                 {% for review in result.reviews %}
-                    <img src="{{ url_for('static', filename='images/yelp_stars/regular/regular_' + review.rating|string + '.png') }}" alt="(Rating: {{ review.rating }})">
-                    {{ review.text }}
+                    <div onclick="window.open('{{ review.url }}')" title="Click to see {{ review.user.name }}'s review on Yelp!">
+                        <img src="{{ url_for('static', filename='images/yelp_stars/regular/regular_' + review.rating|string + '.png') }}" alt="(Rating: {{ review.rating }})">
+                        "{{ review.text }}" ~ {{ review.user.name }} ({{ review.time_created|truncate(10, True, "") }})
+                    </div>
                     <br>
                 {% endfor %}
             </p>

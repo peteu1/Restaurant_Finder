@@ -87,7 +87,6 @@ def restaurant_finder():
 @app.route('/restaurant_finder', methods=['GET', 'POST'])
 def index():
     global storedData
-    print("Globals", globals())
     try:
         term = storedData.term
     except:
@@ -98,17 +97,26 @@ def index():
     print("Data:", args)
     print("Method:", request.method)
     print("searchForm.validate_on_submit()", searchForm.validate_on_submit())
-    
-    if storedData.location_received == "0":
+    lat, lon = float(args["lat"]), float(args["lon"])
+    storedData.setLatLon(lat, lon)
+    # Initialization
+    global restaurants
+    if storedData.location_received == "0" or 'restaurants' not in globals():
         print("Setting location..")
         lat, lon = float(args["lat"]), float(args["lon"])
         storedData.setLatLon(lat, lon)
-        global restaurants
+        #global restaurants
         restaurants = Restaurants(lat, lon)
         print("\n\n> Creating restaurants class\n")
         results, reviews = restaurants.reload_results()
         kwargs = storedData.collect_data(results, reviews, term, searchForm)
+    elif restaurants.coords != (storedData.center_lat, storedData.center_long):
+        restaurants = Restaurants(lat, lon)
+        results, reviews = restaurants.reload_results()
+        kwargs = storedData.collect_data(results, reviews, term, searchForm)
+    # Post/Get Handling
     if request.method == "POST":
+        print("request.form", request.form)
         if searchForm.validate_on_submit():
             # Get entered search term
             term = searchForm.term.data
@@ -118,7 +126,6 @@ def index():
             if term == "" and int(selected) > 0:
                 term = food_map[selected]
             _term = term
-
         else:
             _term = None
             if 'cheap' in request.form:
@@ -133,21 +140,21 @@ def index():
                     storedData.filter_pricey = 0
                 else:
                     storedData.filter_pricey = 1
-
         # Update results if term changed
         if term != storedData.term:
             storedData.term = term
         results, reviews = restaurants.update_search_terms(
             storedData.filter_cheap,
             storedData.filter_pricey,
-            _term
+            _term,
+            True if 'more' in request.form else False
         )
         kwargs = storedData.collect_data(results, reviews, term, searchForm)
     else:
         # Method = Get
         results, reviews = restaurants.filtered_results, restaurants.filtered_reviews
         kwargs = storedData.collect_data(results, reviews, term, searchForm)
-    
+    print(reviews[0])
     return render_template('index.html', **kwargs)
 
 

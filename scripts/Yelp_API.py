@@ -74,7 +74,11 @@ class Yelp():
         """
         business_path = BUSINESS_PATH + business_id
         biz_reviews_path = business_path + "/reviews"
-        return self.request(API_HOST, business_path), self.request(API_HOST, biz_reviews_path)
+        result = self.request(API_HOST, business_path)
+        # Align rating with image name for stars
+        result['rating'] = str(result['rating']) if (result['rating'] % 1) == 0 else f"{str(int(result['rating']))}_half"
+        review = self.request(API_HOST, biz_reviews_path)
+        return result, review
 
     def query_api(self, term, search_limit=DEFAULT_LIMIT, location="Blacksburg VA", coords=(0,0)):
         """Queries the API by the input values from the user.
@@ -104,39 +108,44 @@ class Restaurants():
         self.all_results = self.all_reviews = []
         self.filtered_results = self.filtered_reviews = []
         self.filter_cheap = self.filter_pricey = False
-        self.num_results = 4  # TODO
+        self.num_results = 4
 
-    def reload_results(self):
+    def reload_results(self, load_more=False):
+        if load_more:
+            self.num_results += 2
         self.all_businesses = self.yelp.query_api(self.meal, self.num_results, self.location, self.coords)
         # Get more information for each business that matches current filters
-        self.all_results = []
-        self.all_reviews = []
+        if not load_more:
+            self.all_results = []
+            self.all_reviews = []
         # TODO: Only load those displayed/top 5 at a time?
         for business in self.all_businesses:
             business_id = business['id']
-            response, reviews = self.yelp.get_business(business_id)
-            # Only add to all_results if there is location data
-            if 'coordinates' in response:
-                # Modify photo url to direct to yelp
-                #if 'image_url' in response: TODO
-                img_ID = os.path.basename(os.path.dirname(response['image_url']))
-                response['all_photos'] = f"https://www.yelp.com/biz_photos/{response['alias']}?select={img_ID}"
-                print("Adding:", response['name'])
-                self.all_results.append(response)
-                self.all_reviews.append(reviews)
+            # For load_more, don't re-request business
+            if business_id not in [result['id'] for result in self.all_results]:
+                response, reviews = self.yelp.get_business(business_id)
+                # Only add to all_results if there is location data
+                if 'coordinates' in response:
+                    # Modify photo url to direct to yelp
+                    #if 'image_url' in response: TODO
+                    img_ID = os.path.basename(os.path.dirname(response['image_url']))
+                    response['all_photos'] = f"https://www.yelp.com/biz_photos/{response['alias']}?select={img_ID}"
+                    print("Adding:", response['name'])
+                    self.all_results.append(response)
+                    self.all_reviews.append(reviews)
+        if load_more:
+            return self.update_search_terms()
         self.filtered_results = self.all_results
         self.filtered_reviews = self.all_reviews
-        #filtered_results, filtered_reviews = self.update_excluded_prices()
-        #return filtered_results, filtered_reviews
         return self.all_results, self.all_reviews
 
-    def update_search_terms(self, cheap=-1, pricey=-1, term=None):
+    def update_search_terms(self, cheap=-1, pricey=-1, term=None, load_more=False):
         """Filters results based on price without making call to API.
         Returns:
             filtered_results (list): all_results filtered by price
             filtered_reviews (list): all_reviews filtered by price (aligns with results)
         """
-        print("\n\n> update_search_terms() called", cheap, pricey, term)
+        print("\n\n> update_search_terms() called", cheap, pricey, term, load_more)
         if term != self.meal and term != None:
             self.meal = term
             print("> Setting self.meal to:", term)
@@ -145,7 +154,9 @@ class Restaurants():
         else:
             all_results = self.all_results.copy()
             all_reviews = self.all_reviews.copy()
-        
+        if load_more:
+            return self.reload_results(load_more)
+
         self.filter_cheap = bool(cheap)
         self.filter_pricey = bool(pricey)
         if self.filter_cheap or self.filter_pricey:

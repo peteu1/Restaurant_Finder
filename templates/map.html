@@ -17,6 +17,7 @@
     {% for result in results %}
         features.push({
             "type": "Feature",
+            'properties': {'description': "{{ result.name }}"},
             "geometry": {
                 "type": "Point",
                 "coordinates": [
@@ -24,21 +25,33 @@
                         {{ result.coordinates.latitude }}
                 ]
             }
-        })
+        });
     {% endfor %}
     map.on('load', function() {
-        var geojsonData = {
+        var places = {
             "type": "FeatureCollection",
             "features": features
         };
+        map.addSource('places', {
+            'type': 'geojson',
+            'data': places
+        });
+        map.addLayer({
+            "id": "poi-labels",
+            "type": "symbol",
+            "source": "places",
+            'layout': {
+                'text-field': ['get', 'description'],
+                'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+                'text-radial-offset': 0.5,
+                'text-justify': 'auto'
+            }
+        });
         map.addLayer({
             "id": "points",
             "type": "circle",
-            "source": {
-            "type": "geojson",
-            "data": geojsonData
-            }
-        })
+            "source": "places"
+        });
     })
 </script>
 
