@@ -21,8 +21,8 @@
     </div>
     <div id="bottom-container">
         <strong>Results found: {{ results|length }}</strong>
-        <button>Click to load more!</button><br>
-        <div onclick="window.open('www.yelp.com')">
+        <button>Click to load more!</button>
+        <div onclick="window.open('www.yelp.com')" style="float:right">
             Powered by: Yelp <img src="{{ url_for('static', filename='images/burst_icon.png') }}" alt="Logo">
         </div>
 	</div>
