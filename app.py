@@ -34,11 +34,10 @@ class ButtonForm(FlaskForm):
 
 class StoredData():
     def __init__(self):
-        # TODO: centers will come from user location
         self.zoom = 12
         self.center_long = -80.4137  # Blacks
         self.center_lat = 37.22922  # Burg  (You know location isn't working if it shows bburg)
-        self.location_received = "0"  # TODO:  Combine with _templated_rendered
+        self.location_received = "0"
         self._template_rendered = False
         self.term = "dinner"
         self.filter_cheap = 0
@@ -78,29 +77,11 @@ def page_not_found(e):
 def internal_server_error(e):
     return render_template('500.html'), 500
 
-
-# class Restaurants():
-#     def __init__(self):
-#         self.meal = "dinner"
-#         self.filter_cheap = self.filter_pricey = False
-    
-#     def update_search_terms(self, cheap=-1, pricey=-1, term=None):
-#         """Filters results based on price without making call to API.
-#         Returns:
-#             filtered_results (list): all_results filtered by price
-#             filtered_reviews (list): all_reviews filtered by price (aligns with results)
-#         """
-#         print("\n\n> !!!update_search_terms() called", cheap, pricey, term)
-#         self.meal = term
-
-#         return "a", "b"
-
-
-storedData = StoredData()
-
 @app.route("/", methods=['POST', 'GET'])
 def restaurant_finder():
     print(">restaurant_finder() called")
+    global storedData
+    storedData = StoredData()
     return render_template("home.html")
 
 @app.route('/restaurant_finder', methods=['GET', 'POST'])
@@ -116,18 +97,11 @@ def index():
         print("Setting location..")
         lat, lon = float(args["lat"]), float(args["lon"])
         storedData.setLatLon(lat, lon)
-        if 'restaurants' not in globals():
-            global restaurants
-            restaurants = Restaurants(lat, lon)
-            print("\n\n> Creating restaurants class\n")
-            results, reviews = restaurants.reload_results()
-            # results, reviews = restaurants.update_search_terms(
-            #     storedData.filter_cheap,
-            #     storedData.filter_pricey, 
-            #     storedData.term
-            # )
-            # TODO: Remove above
-            kwargs = storedData.collect_data(results, reviews, term, searchForm)
+        global restaurants
+        restaurants = Restaurants(lat, lon)
+        print("\n\n> Creating restaurants class\n")
+        results, reviews = restaurants.reload_results()
+        kwargs = storedData.collect_data(results, reviews, term, searchForm)
     if request.method == "POST":
         print("KJLDASKF:", request.form)
         if searchForm.validate_on_submit():
@@ -166,9 +140,7 @@ def index():
         kwargs = storedData.collect_data(results, reviews, term, searchForm)
     else:
         # Method = Get
-        #results, reviews = restaurants.filtered_results, restaurants.filtered_reviews
-        # TODO
-        # results = reviews = []
+        results, reviews = restaurants.filtered_results, restaurants.filtered_reviews
         kwargs = storedData.collect_data(results, reviews, term, searchForm)
     
     return render_template('index.html', **kwargs)
